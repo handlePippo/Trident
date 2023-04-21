@@ -24,15 +24,21 @@ const Convertitore = () => {
 
   return (
     <>
-      <div style={{ display: "flex" }}>
-        <p>EUR: {eur}</p>
-        <p>USD: {Math.round(eur / rate)}</p>
-        <p>{error && error}</p>
-      </div>
-      <div>
-        <button onClick={() => setEur(eur + 10)}>+10</button>
-        <button onClick={() => setEur(eur + 100)}>+100</button>
-        <button onClick={() => setEur(0)}>Reset</button>
+      <div className='d-flex justify-content-center'>
+        <div>
+          <div className='px-5 '>
+            <h1>EUR: {eur} €</h1>
+            <h1>USD: {Math.round(eur / rate)} $</h1>
+          </div>
+          <p>{error && error}</p>
+        </div>
+        <div className='d-flex justify-content-center'>
+          <button onClick={() => setEur(eur + 10)}>+10</button>
+          <button className='mx-2' onClick={() => setEur(eur + 100)}>
+            +100
+          </button>
+          <button onClick={() => setEur(0)}>Reset</button>
+        </div>
       </div>
     </>
   );

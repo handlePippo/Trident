@@ -21,10 +21,12 @@ const Form = () => {
         ...taskList,
         { task: formik.values.task, date: formik.values.date },
       ]);
-      setDuplicateError("");
       counter = 0;
     } else {
       setDuplicateError("Per favore, non inserire doppioni!");
+      setTimeout(() => {
+        setDuplicateError("");
+      }, 1000);
     }
   };
 

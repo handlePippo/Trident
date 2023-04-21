@@ -1,19 +1,23 @@
 import "./App.css";
-import Convertitore from "./Components/Convertitore";
-import Form from "./Components/Form";
-import Meteo from "./Components/Meteo";
-import Registration from "./Components/Registration";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Homepage from "./Components/Homepage";
+import ConvertitorePage from "./Routes/ConvertitorePage";
+import MeteoPage from "./Routes/MeteoPage";
+import Tasklist from "./Routes/Tasklist";
 
 function App() {
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <Convertitore />
-        <Meteo />
-        <Form />
-        <Registration />
-      </header>
-    </div>
+    <>
+      <Router>
+        <Routes>
+          <Route exact path='/' element={<Homepage />} />
+          <Route path='/convertitore' element={<ConvertitorePage />} />
+          <Route path='/meteo' element={<MeteoPage />} />
+          <Route path='/tasklist' element={<Tasklist />} />
+          <Route path='/registration' element={""} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 

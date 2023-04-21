@@ -93,3 +93,25 @@ select.input-error {
 button:disabled {
   opacity: 0.35;
 }
+
+.portfolio {
+  max-width: 11vw;
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+button:hover {
+  color: #666;
+}
+
+button:focus {
+  outline: none;
+}
+
+button a {
+  text-decoration: none;
+}
