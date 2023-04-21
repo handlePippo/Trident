@@ -26,7 +26,7 @@ const Convertitore = () => {
     <>
       <div style={{ display: "flex" }}>
         <p>EUR: {eur}</p>
-        <p>USD: {Math.floor(eur / rate)}</p>
+        <p>USD: {Math.round(eur / rate)}</p>
         <p>{error && error}</p>
       </div>
       <div>

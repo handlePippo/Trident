@@ -70,11 +70,6 @@ select::placeholder {
   color: #a0aec0;
 }
 
-input[type="checkbox"] {
-  width: fit-content;
-  margin-right: 0.5rem;
-  transform: scale(1.25);
-}
 
 button {
   display: block;

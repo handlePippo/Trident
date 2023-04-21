@@ -46,7 +46,7 @@ const Meteo = () => {
           value={formik.values.city}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder='Es: Rome, Italy'
+          placeholder='Es: Rome, it'
         />
         {formik.errors.city && formik.touched.city && (
           <p className='error'>{formik.errors.city}</p>
@@ -56,7 +56,9 @@ const Meteo = () => {
         <div>
           {Object.values(meteo).length > 0 && (
             <>
-              <p>Meteo di {meteo.name}:</p>
+              <p>
+                Meteo di {meteo.name}, {meteo.sys.country}:
+              </p>
               {meteo.weather.map((el) => {
                 return (
                   <p>
