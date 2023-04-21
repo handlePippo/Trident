@@ -11,7 +11,8 @@ const Meteo = () => {
     initialValues: {
       city: "",
     },
-    onSubmit: () => {
+    validationSchema: basicSchemaMeteo,
+    onSubmit: (values, actions) => {
       try {
         axios
           .get(url)
@@ -26,8 +27,10 @@ const Meteo = () => {
       } catch (e) {
         setError(e.message);
       }
+      setTimeout(() => {
+        actions.resetForm();
+      }, 2000);
     },
-    validationSchema: basicSchemaMeteo,
   });
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${formik.values.city}&APPID=424e34f5fc142070d70c3073d0d1ba14`;
 

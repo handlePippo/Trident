@@ -36,7 +36,7 @@ export const basicSchemaRegistration = Yup.object().shape({
     .required("Impossibile proseguire senza inserire email"),
   datanascita: Yup.string().required("Inserisci la tua data di nascita"),
   password: Yup.string()
-    .min(5)
+    .min(5, "Minimo 5 caratteri")
     .matches(passwordRules, { message: "Password debole, riprova" })
 
     .required("Impossibile proseguire senza password"),

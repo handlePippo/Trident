@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useFormik } from "formik";
 import { basicSchemaRegistration } from "../Utils/bs";
 
 const Registration = () => {
+  const dateInputRef = useRef(null);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -13,6 +15,13 @@ const Registration = () => {
       datanascita: null,
     },
     validationSchema: basicSchemaRegistration,
+    onSubmit: (values, actions) => {
+      //businesslogic
+      setTimeout(() => {
+        actions.resetForm();
+        dateInputRef.current.value = null;
+      }, 1000);
+    },
   });
 
   return (
@@ -69,6 +78,7 @@ const Registration = () => {
           value={formik.values.datanascita}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          ref={dateInputRef}
           type='date'
           id='datanascita'
           className={
