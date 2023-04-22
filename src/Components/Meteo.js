@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import { basicSchemaMeteo } from "../Utils/bs";
 import axios from "axios";
+import BackButton from "../Utils/backBtn";
 
 const Meteo = () => {
   const [meteo, setMeteo] = useState([]);
@@ -29,12 +30,10 @@ const Meteo = () => {
       }
       setTimeout(() => {
         actions.resetForm();
-      }, 2000);
+      }, 3000);
     },
   });
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${formik.values.city}&APPID=424e34f5fc142070d70c3073d0d1ba14`;
-
-  console.log(meteo);
 
   return (
     <>
@@ -74,6 +73,7 @@ const Meteo = () => {
           )}
         </div>
       </form>
+      <BackButton />
     </>
   );
 };

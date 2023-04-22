@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useFormik } from "formik";
 import { basicSchemaForm } from "../Utils/bs";
+import BackButton from "../Utils/backBtn";
 
 const Form = () => {
   const [taskList, setTaskList] = useState([]);
@@ -8,8 +9,7 @@ const Form = () => {
   const dateInputRef = useRef(null);
 
   const addTask = () => {
-    const { task: fTask } = formik.values;
-    const { date: fDate } = formik.values;
+    const { task: fTask, date: fDate } = formik.values;
     let counter = 0;
     taskList.forEach((el) => {
       if (fTask === el.task && fDate === el.date) {
@@ -103,6 +103,7 @@ const Form = () => {
           {duplicateError && <p className='error'>{duplicateError}</p>}
         </form>
       </div>
+      <BackButton />
     </div>
   );
 };

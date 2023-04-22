@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import LogOutBtn from "../Utils/logoutBtn";
 
 const Homepage = () => {
   return (
@@ -16,7 +17,10 @@ const Homepage = () => {
           <button className='mx-2'>Meteo</button>
         </Link>
         <Link to='/tasklist'>
-          <button className='mx-3'>Meteo</button>
+          <button className='mx-3'>Tasklist</button>
+        </Link>
+        <Link to='/registration'>
+          <button className='mx-4'>Registrazione</button>
         </Link>
       </div>
       <h4>Test per Trident Suisse</h4>
@@ -30,6 +34,7 @@ const Homepage = () => {
           Portfolio Personale
         </a>
       </button>
+      <LogOutBtn />
     </div>
   );
 };

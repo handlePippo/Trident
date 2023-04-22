@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import BackButton from "../Utils/backBtn";
 
 const Convertitore = () => {
   const apiUrl = "https://api.api-ninjas.com/v1/exchangerate?pair=USD_EUR";
@@ -40,6 +41,7 @@ const Convertitore = () => {
           <button onClick={() => setEur(0)}>Reset</button>
         </div>
       </div>
+      <BackButton />
     </>
   );
 };

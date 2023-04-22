@@ -17,7 +17,7 @@ export const basicSchemaForm = Yup.object().shape({
   date: Yup.string().required("Obbligatorio"),
 });
 
-const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
+// const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 // Minimo 5 caratteri, 1 lettera maiuscola, 1 lettera minuscola, 1 numero.
 
 export const basicSchemaRegistration = Yup.object().shape({
@@ -35,12 +35,12 @@ export const basicSchemaRegistration = Yup.object().shape({
     .email("Inserisci un'email valida")
     .required("Impossibile proseguire senza inserire email"),
   datanascita: Yup.string().required("Inserisci la tua data di nascita"),
-  password: Yup.string()
-    .min(5, "Minimo 5 caratteri")
-    .matches(passwordRules, { message: "Password debole, riprova" })
+  // password: Yup.string()
+  //   .min(5, "Minimo 5 caratteri")
+  //   .matches(passwordRules, { message: "Password debole, riprova" })
 
-    .required("Impossibile proseguire senza password"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Le due password non combaciano")
-    .required("Conferma la password."),
+  //   .required("Impossibile proseguire senza password"),
+  // confirmPassword: Yup.string()
+  //   .oneOf([Yup.ref("password"), null], "Le due password non combaciano")
+  //   .required("Conferma la password."),
 });

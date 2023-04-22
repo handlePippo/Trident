@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { useFormik } from "formik";
 import { basicSchemaRegistration } from "../Utils/bs";
+import BackButton from "../Utils/backBtn";
 
 const Registration = () => {
   const dateInputRef = useRef(null);
@@ -91,7 +92,7 @@ const Registration = () => {
           <p className='error'>{formik.errors.datanascita}</p>
         )}
 
-        <label htmlFor='email'>Password</label>
+        {/* <label htmlFor='email'>Password</label>
         <input
           value={formik.values.password}
           onChange={formik.handleChange}
@@ -124,12 +125,13 @@ const Registration = () => {
         />
         {formik.errors.confirmPassword && formik.touched.confirmPassword && (
           <p className='error'>{formik.errors.confirmPassword}</p>
-        )}
+        )} */}
 
         <button type='submit' disabled={formik.isSubmitting}>
           Registrati
         </button>
       </form>
+      <BackButton />
     </>
   );
 };
