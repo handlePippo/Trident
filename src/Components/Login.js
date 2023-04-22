@@ -1,29 +1,29 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useFormik } from "formik";
-import { basicSchemaRegistration } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
+import { useNavigate } from "react-router-dom";
+import { basicSchemaLogin } from "../Utils/bs";
 
-const Registration = () => {
-  const dateInputRef = useRef(null);
+const Login = () => {
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       name: "",
-      cognome: "",
       email: "",
-      password: "",
-      confirmPassword: "",
-      datanascita: null,
     },
-    validationSchema: basicSchemaRegistration,
+    validationSchema: basicSchemaLogin,
     onSubmit: (values, actions) => {
       //businesslogic
       setTimeout(() => {
         actions.resetForm();
-        dateInputRef.current.value = null;
       }, 1000);
     },
   });
+
+  const registrationUser = () => {
+    navigate("/registration");
+  };
 
   return (
     <>
@@ -43,7 +43,7 @@ const Registration = () => {
         {formik.errors.name && formik.touched.name && (
           <p className='error'>{formik.errors.name}</p>
         )}
-        <label htmlFor='cognome'>Cognome</label>
+        {/* <label htmlFor='cognome'>Cognome</label>
         <input
           value={formik.values.cognome}
           onChange={formik.handleChange}
@@ -57,7 +57,7 @@ const Registration = () => {
         />
         {formik.errors.cognome && formik.touched.cognome && (
           <p className='error'>{formik.errors.cognome}</p>
-        )}
+        )} */}
         <label htmlFor='email'>Email</label>
         <input
           value={formik.values.email}
@@ -73,9 +73,9 @@ const Registration = () => {
         {formik.errors.email && formik.touched.email && (
           <p className='error'>{formik.errors.email}</p>
         )}
-        <label htmlFor='data'>Data di nascita</label>
+        {/* <label htmlFor='data'>Data di nascita</label> */}
 
-        <input
+        {/* <input
           value={formik.values.datanascita}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -90,7 +90,7 @@ const Registration = () => {
         />
         {formik.errors.datanascita && formik.touched.datanascita && (
           <p className='error'>{formik.errors.datanascita}</p>
-        )}
+        )} */}
 
         {/* <label htmlFor='email'>Password</label>
         <input
@@ -128,12 +128,13 @@ const Registration = () => {
         )} */}
 
         <button type='submit' disabled={formik.isSubmitting}>
-          Registrati
+          Accedi
         </button>
+        <button onClick={registrationUser}>Registrati</button>
       </form>
-      <BackButton goto='/' />
+      <BackButton />
     </>
   );
 };
 
-export default Registration;
+export default Login;

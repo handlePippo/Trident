@@ -10,7 +10,7 @@ const Homepage = () => {
       style={{ height: "100vh" }}
     >
       <h1>Homepage</h1>
-      <div className='d-flex'>
+      <div className='d-flex mb-5 '>
         <Link to='/convertitore'>
           <button>Convertitore</button>
         </Link>
@@ -20,21 +20,20 @@ const Homepage = () => {
         <Link to='/tasklist'>
           <button className='mx-3'>Tasklist</button>
         </Link>
-        <Link to='/registration'>
-          <button className='mx-4'>Registrazione</button>
-        </Link>
       </div>
-      <h4>Test per Trident Suisse</h4>
-      <h6>Filippo Palliani</h6>
-      <button style={{ maxWidth: "11vw" }}>
-        <a
-          className='portfolio'
-          href='https://filippopalliani.netlify.app/'
-          target='blank'
-        >
-          Portfolio Personale
-        </a>
-      </button>
+      <div className='d-flex flex-column justify-content-center align-items-center'>
+        <h4>Test per Trident Suisse</h4>
+        <h6>Filippo Palliani</h6>
+        <button style={{ maxWidth: "11vw" }}>
+          <a
+            className='portfolio'
+            href='https://filippopalliani.netlify.app/'
+            target='blank'
+          >
+            Portfolio Personale
+          </a>
+        </button>
+      </div>
       <BackButton goto={"/"} myimg={logOutImg} />
     </div>
   );
