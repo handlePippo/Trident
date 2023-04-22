@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import LogOutBtn from "../Utils/logoutBtn";
+import logOutImg from "../../src/Utils/media/logout.png";
+import BackButton from "../Utils/backBtn";
 
 const Homepage = () => {
   return (
@@ -34,7 +35,7 @@ const Homepage = () => {
           Portfolio Personale
         </a>
       </button>
-      <LogOutBtn />
+      <BackButton goto={"/"} myimg={logOutImg} />
     </div>
   );
 };
