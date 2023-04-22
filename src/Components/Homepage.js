@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import logOutImg from "../../src/Utils/media/logout.png";
 import BackButton from "../Utils/backBtn";
 import Button from "../Library/Button";
+import { AuthContext } from "../App";
 
 const Homepage = () => {
+  const { setAuth } = useContext(AuthContext);
+
+  const handleClick = () => {
+    setAuth(false);
+  };
   return (
     <div
       className='d-flex align-items-center justify-content-center flex-column'
@@ -27,7 +33,7 @@ const Homepage = () => {
         <h6>Filippo Palliani</h6>
         <Button name='Portfolio' portfolio={true} />
       </div>
-      <BackButton goto={"/"} myimg={logOutImg} />
+      <BackButton goto={"/"} myimg={logOutImg} handleClick={handleClick} />
     </div>
   );
 };

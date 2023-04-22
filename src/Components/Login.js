@@ -43,7 +43,6 @@ const Login = () => {
         setAuth(true);
         navigate("/homepage");
       } else {
-        setAuth(false);
         setError("Dati di accesso errati! Riprovare.");
         setTimeout(() => {
           setError("");

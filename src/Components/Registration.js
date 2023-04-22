@@ -38,7 +38,7 @@ const Registration = () => {
         setRegistration({ ...registration, datanascita: value });
         break;
       default:
-        return;
+        setRegistration({ ...registration });
     }
     try {
       basicSchemaRegistration.validateSync({
