@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import BackButton from "../Utils/backBtn";
 import Input from "../Library/Input";
 import { basicSchemaEurUsd } from "../Utils/bs";
+import Button from "../Library/Button";
+import BackButton from "../Utils/backBtn";
 
 const Convertitore = () => {
   const apiUrl = "https://api.api-ninjas.com/v1/exchangerate?pair=USD_EUR";
 
   const [rate, setRate] = useState(0);
-  const [eur, setEur] = useState("");
+  const [eur, setEur] = useState(null);
   const [error, setError] = useState("");
 
   const fetchData = (url) => {
@@ -51,20 +52,22 @@ const Convertitore = () => {
         </div>
       </div>
       <div className='d-flex flex-column justify-content-center'>
-        <button disabled={!!error} onClick={() => setEur(Number(eur) + 10)}>
-          +10
-        </button>
-        <button
-          disabled={!!error}
-          className='mx-2'
-          onClick={() => setEur(Number(eur) + 100)}
-        >
-          +100
-        </button>
-        <button disabled={!!error} onClick={() => setEur(0)}>
-          Reset
-        </button>
+        <Button
+          name={"+100"}
+          handleClick={() => setEur(Number(eur) + 10)}
+          isDisabled={!!error}
+        />
+        <Button
+          name={"+100"}
+          handleClick={() => setEur(Number(eur) + 100)}
+          isDisabled={!!error}
+        />
       </div>
+      <Button
+        name={"Reset"}
+        handleClick={() => setEur(0)}
+        isDisabled={!!error}
+      />
       <BackButton />
     </div>
   );

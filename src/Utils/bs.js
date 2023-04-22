@@ -1,6 +1,9 @@
 import * as Yup from "yup";
 import moment from "moment";
 
+const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
+// Minimo 5 caratteri, 1 lettera maiuscola, 1 lettera minuscola, 1 numero.
+
 export const basicSchemaMeteo = Yup.object().shape({
   city: Yup.string()
     .min(4, "Troppo corto!")
@@ -29,8 +32,6 @@ export const basicSchemaForm = Yup.object().shape({
     )
     .required("Inserisci la data!"),
 });
-// const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
-// Minimo 5 caratteri, 1 lettera maiuscola, 1 lettera minuscola, 1 numero.
 
 export const basicSchemaRegistration = Yup.object().shape({
   name: Yup.string()
@@ -58,26 +59,15 @@ export const basicSchemaRegistration = Yup.object().shape({
 });
 
 export const basicSchemaLogin = Yup.object().shape({
-  name: Yup.string()
-    .min(3)
-    .max(10)
-    .matches(/^[a-zA-Z,\s]+$/, "Inserire solo lettere")
-    .required("Inserisci il tuo nome"),
-  // cognome: Yup.string()
-  //   .min(3)
-  //   .max(10)
-  //   .matches(/^[a-zA-Z,\s]+$/, "Inserire solo lettere")
-  //   .required("Inserisci il tuo cognome"),
   email: Yup.string()
     .email("Inserisci un'email valida")
     .required("Impossibile proseguire senza inserire email"),
-  // datanascita: Yup.string().required("Inserisci la tua data di nascita"),
-  // // password: Yup.string()
-  // //   .min(5, "Minimo 5 caratteri")
-  // //   .matches(passwordRules, { message: "Password debole, riprova" })
+  password: Yup.string()
+    .min(5, "Minimo 5 caratteri")
+    .matches(passwordRules, { message: "Password debole, riprova" })
 
-  // //   .required("Impossibile proseguire senza password"),
-  // // confirmPassword: Yup.string()
-  // //   .oneOf([Yup.ref("password"), null], "Le due password non combaciano")
-  // //   .required("Conferma la password."),
+    .required("Impossibile proseguire senza password"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Le due password non combaciano")
+    .required("Conferma la password."),
 });

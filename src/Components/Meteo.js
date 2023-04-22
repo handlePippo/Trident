@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { basicSchemaMeteo } from "../Utils/bs";
 import axios from "axios";
 import BackButton from "../Utils/backBtn";
 import Input from "../Library/Input";
+import Button from "../Library/Button";
 
 const Meteo = () => {
   const [meteo, setMeteo] = useState([]);
@@ -11,13 +12,14 @@ const Meteo = () => {
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${text}&APPID=424e34f5fc142070d70c3073d0d1ba14`;
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       axios
         .get(url)
         .then((response) => {
           console.log(response.data);
           setMeteo(response.data);
+          console.log(response);
         })
         .catch(() => {
           setError("Impossibile individuare questa città");
@@ -25,7 +27,7 @@ const Meteo = () => {
     } catch (e) {
       setError(e.message);
     }
-  };
+  }, [url]);
 
   const handleChange = (value) => {
     setText(value);
@@ -37,10 +39,13 @@ const Meteo = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    fetchData();
-  };
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      fetchData();
+    },
+    [fetchData]
+  );
 
   return (
     <>
@@ -53,9 +58,7 @@ const Meteo = () => {
           error={error}
           label='Inserisci una città'
         />
-        <button type='submit' disabled={!!error}>
-          Check Meteo
-        </button>
+        <Button type='submit' name='Check Meteo' isDisabled={!!error} />
         <div>
           {Object.values(meteo).length > 0 && (
             <>

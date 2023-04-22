@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  button {
+    display: block;
+    margin: 1rem 0;
+    padding: 0.35rem 0.5rem;
+    background-color: #4299e1;
+    color: #1a202c;
+    border: none;
+    border-radius: 3px;
+    max-width: 200px;
+    min-width: 150px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.35;
+    }
+
+    &:hover {
+      color: #666;
+    }
+
+    &:focus {
+      outline: none;
+    }
+    a {
+      text-decoration: none;
+      color: #1a202c;
+    }
+    :hover {
+      opacity: 0.35;
+    }
+  }
+}

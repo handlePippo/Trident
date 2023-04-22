@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logOutImg from "../../src/Utils/media/logout.png";
 import BackButton from "../Utils/backBtn";
+import Button from "../Library/Button";
 
 const Homepage = () => {
   return (
@@ -12,27 +13,19 @@ const Homepage = () => {
       <h1>Homepage</h1>
       <div className='d-flex mb-5 '>
         <Link to='/convertitore'>
-          <button>Convertitore</button>
+          <Button name='Convertitore' />
         </Link>
         <Link to='/meteo'>
-          <button className='mx-2'>Meteo</button>
+          <Button name='Meteo' />
         </Link>
         <Link to='/tasklist'>
-          <button className='mx-3'>Tasklist</button>
+          <Button name='TaskList' />
         </Link>
       </div>
       <div className='d-flex flex-column justify-content-center align-items-center'>
         <h4>Test per Trident Suisse</h4>
         <h6>Filippo Palliani</h6>
-        <button style={{ maxWidth: "11vw" }}>
-          <a
-            className='portfolio'
-            href='https://filippopalliani.netlify.app/'
-            target='blank'
-          >
-            Portfolio Personale
-          </a>
-        </button>
+        <Button name='Portfolio' portfolio={true} />
       </div>
       <BackButton goto={"/"} myimg={logOutImg} />
     </div>

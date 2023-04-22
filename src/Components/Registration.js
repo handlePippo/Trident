@@ -1,135 +1,111 @@
-import React, { useRef } from "react";
-import { useFormik } from "formik";
+import React, { useRef, useState } from "react";
 import { basicSchemaRegistration } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
+import Button from "../Library/Button";
+import Input from "../Library/Input";
 
 const Registration = () => {
   const dateInputRef = useRef(null);
+  const [error, setError] = useState("");
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      cognome: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      datanascita: null,
-    },
-    validationSchema: basicSchemaRegistration,
-    onSubmit: (values, actions) => {
-      //businesslogic
-      setTimeout(() => {
-        actions.resetForm();
-        dateInputRef.current.value = null;
-      }, 1000);
-    },
+  const [registration, setRegistration] = useState({
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    datanascita: null,
   });
+
+  const handleChange = (value, name) => {
+    switch (name) {
+      case "name":
+        setRegistration({ ...registration, name: value });
+        break;
+      case "surname":
+        setRegistration({ ...registration, surname: value });
+        break;
+      case "email":
+        setRegistration({ ...registration, email: value });
+        break;
+      case "password":
+        setRegistration({ ...registration, password: value });
+        break;
+      case "confirmPassword":
+        setRegistration({ ...registration, confirmPassword: value });
+        break;
+      case "datanascita":
+        setRegistration({ ...registration, datanascita: value });
+        break;
+      default:
+        return;
+    }
+    try {
+      basicSchemaRegistration.validateSync({
+        ...registration,
+        [name]: value,
+      });
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <>
-      <form onSubmit={formik.handleSubmit} autoComplete='off'>
-        <label htmlFor='nome'>Nome</label>
-        <input
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='text'
-          id='name'
+      <form onSubmit={handleSubmit} autoComplete='off'>
+        <Input
+          value={registration.name}
+          handleChange={handleChange}
+          name='name'
           placeholder='Inserisci il tuo nome'
-          className={
-            formik.errors.name && formik.touched.name ? "input-error" : ""
-          }
+          label='Nome'
         />
-        {formik.errors.name && formik.touched.name && (
-          <p className='error'>{formik.errors.name}</p>
-        )}
-        <label htmlFor='cognome'>Cognome</label>
-        <input
-          value={formik.values.cognome}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='text'
-          id='cognome'
+        <Input
+          value={registration.surname}
+          handleChange={handleChange}
+          name='surname'
           placeholder='Inserisci il tuo cognome'
-          className={
-            formik.errors.cognome && formik.touched.cognome ? "input-error" : ""
-          }
+          label='Cognome'
         />
-        {formik.errors.cognome && formik.touched.cognome && (
-          <p className='error'>{formik.errors.cognome}</p>
-        )}
-        <label htmlFor='email'>Email</label>
-        <input
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='email'
-          id='email'
+        <Input
+          value={registration.email}
+          handleChange={handleChange}
+          typeInput='email'
+          name='email'
           placeholder='Inserisci la tua mail'
-          className={
-            formik.errors.email && formik.touched.email ? "input-error" : ""
-          }
+          label='Email'
         />
-        {formik.errors.email && formik.touched.email && (
-          <p className='error'>{formik.errors.email}</p>
-        )}
-        <label htmlFor='data'>Data di nascita</label>
-
-        <input
-          value={formik.values.datanascita}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+        <Input
+          value={registration.datanascita}
+          handleChange={handleChange}
           ref={dateInputRef}
-          type='date'
-          id='datanascita'
-          className={
-            formik.errors.datanascita && formik.touched.datanascita
-              ? "input-error"
-              : ""
-          }
+          typeInput='date'
+          name='datanascita'
+          label='Data di nascita'
         />
-        {formik.errors.datanascita && formik.touched.datanascita && (
-          <p className='error'>{formik.errors.datanascita}</p>
-        )}
-
-        {/* <label htmlFor='email'>Password</label>
-        <input
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='password'
-          id='password'
+        <Input
+          value={registration.password}
+          handleChange={handleChange}
+          typeInput='password'
+          name='password'
+          label='Password'
           placeholder='Inserisci la password'
-          className={
-            formik.errors.password && formik.touched.password
-              ? "input-error"
-              : ""
-          }
         />
-        {formik.errors.password && formik.touched.password && (
-          <p className='error'>{formik.errors.password}</p>
-        )}
-        <label htmlFor='confirmPassword'>Conferma Password</label>
-        <input
-          value={formik.values.confirmPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='password'
-          id='confirmPassword'
+        <Input
+          value={registration.confirmPassword}
+          handleChange={handleChange}
+          typeInput='password'
+          name='confirmPassword'
+          label='Conferma Password'
           placeholder='Inserisci nuovamente la password'
-          className={
-            formik.errors.confirmPassword && formik.touched.confirmPassword
-              ? "input-error"
-              : ""
-          }
         />
-        {formik.errors.confirmPassword && formik.touched.confirmPassword && (
-          <p className='error'>{formik.errors.confirmPassword}</p>
-        )} */}
 
-        <button type='submit' disabled={formik.isSubmitting}>
-          Registrati
-        </button>
+        <Button name='Registrati' isDisabled={!!error} />
       </form>
       <BackButton goto='/' />
     </>

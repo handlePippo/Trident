@@ -1,33 +1,57 @@
-import React, { useContext } from "react";
-import { useFormik } from "formik";
+import React, { useCallback, useContext, useState } from "react";
 import BackButton from "../Utils/backBtn";
 import { useNavigate } from "react-router-dom";
 import { basicSchemaLogin } from "../Utils/bs";
 import { AuthContext } from "../App";
+import Button from "../Library/Button";
+import Input from "../Library/Input";
+import { Credentials } from "../credentials";
 
 const Login = () => {
   const navigate = useNavigate();
-
   const { setAuth } = useContext(AuthContext);
-
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-    },
-    validationSchema: basicSchemaLogin,
-    onSubmit: (values, actions) => {
-      //businesslogic
-      setTimeout(() => {
-        actions.resetForm();
-      }, 1000);
-    },
+  const [error, setError] = useState("");
+  const [login, setLogin] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setAuth(true);
+  const handleChange = (value, name) => {
+    if (name === "email") {
+      setLogin({ ...login, email: value });
+    } else if (name === "password") {
+      setLogin({ ...login, password: value });
+    } else {
+      setLogin({ ...login, confirmPassword: value });
+    }
+    try {
+      basicSchemaLogin.validateSync({ ...login, [name]: value });
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
   };
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (
+        login.email === Credentials.email &&
+        login.password === Credentials.password
+      ) {
+        setAuth(true);
+        navigate("/homepage");
+      } else {
+        setAuth(false);
+        setError("Dati di accesso errati! Riprovare.");
+        setTimeout(() => {
+          setError("");
+        }, 1500);
+      }
+    },
+    [login.email, login.password, setAuth, navigate, setError]
+  );
 
   const registrationUser = () => {
     navigate("/registration");
@@ -36,111 +60,41 @@ const Login = () => {
   return (
     <>
       <form onSubmit={handleSubmit} autoComplete='off'>
-        <label htmlFor='nome'>Nome</label>
-        <input
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='text'
-          id='name'
-          placeholder='Inserisci il tuo nome'
-          className={
-            formik.errors.name && formik.touched.name ? "input-error" : ""
-          }
-        />
-        {formik.errors.name && formik.touched.name && (
-          <p className='error'>{formik.errors.name}</p>
-        )}
-        {/* <label htmlFor='cognome'>Cognome</label>
-        <input
-          value={formik.values.cognome}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='text'
-          id='cognome'
-          placeholder='Inserisci il tuo cognome'
-          className={
-            formik.errors.cognome && formik.touched.cognome ? "input-error" : ""
-          }
-        />
-        {formik.errors.cognome && formik.touched.cognome && (
-          <p className='error'>{formik.errors.cognome}</p>
-        )} */}
-        <label htmlFor='email'>Email</label>
-        <input
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='email'
-          id='email'
+        <Input
+          value={login.email}
+          handleChange={handleChange}
+          typeInput='email'
+          name='email'
           placeholder='Inserisci la tua mail'
-          className={
-            formik.errors.email && formik.touched.email ? "input-error" : ""
-          }
+          label='Email'
         />
-        {formik.errors.email && formik.touched.email && (
-          <p className='error'>{formik.errors.email}</p>
-        )}
-        {/* <label htmlFor='data'>Data di nascita</label> */}
+        <Input
+          value={login.password}
+          handleChange={handleChange}
+          typeInput='password'
+          name='password'
+          placeholder='Inserisci la tua password'
+          label='Password'
+        />
+        <Input
+          value={login.confirmPassword}
+          handleChange={handleChange}
+          typeInput='password'
+          name='confirmPassword'
+          placeholder='Inserisci di nuovo la tua password'
+          label='Conferma Password'
+          error={error}
+        />
 
-        {/* <input
-          value={formik.values.datanascita}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          ref={dateInputRef}
-          type='date'
-          id='datanascita'
-          className={
-            formik.errors.datanascita && formik.touched.datanascita
-              ? "input-error"
-              : ""
-          }
-        />
-        {formik.errors.datanascita && formik.touched.datanascita && (
-          <p className='error'>{formik.errors.datanascita}</p>
-        )} */}
+        <Button name='Accedi' type='submit' isDisabled={!!error} />
 
-        {/* <label htmlFor='email'>Password</label>
-        <input
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='password'
-          id='password'
-          placeholder='Inserisci la password'
-          className={
-            formik.errors.password && formik.touched.password
-              ? "input-error"
-              : ""
-          }
+        <Button
+          name='Registrati'
+          handleClick={registrationUser}
+          isDisabled={!!error}
         />
-        {formik.errors.password && formik.touched.password && (
-          <p className='error'>{formik.errors.password}</p>
-        )}
-        <label htmlFor='confirmPassword'>Conferma Password</label>
-        <input
-          value={formik.values.confirmPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          type='password'
-          id='confirmPassword'
-          placeholder='Inserisci nuovamente la password'
-          className={
-            formik.errors.confirmPassword && formik.touched.confirmPassword
-              ? "input-error"
-              : ""
-          }
-        />
-        {formik.errors.confirmPassword && formik.touched.confirmPassword && (
-          <p className='error'>{formik.errors.confirmPassword}</p>
-        )} */}
-
-        <button type='submit' disabled={formik.isSubmitting}>
-          Accedi
-        </button>
-        <button onClick={registrationUser}>Registrati</button>
+        <BackButton />
       </form>
-      <BackButton />
     </>
   );
 };

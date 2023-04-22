@@ -2,13 +2,14 @@ import React, { useRef, useState } from "react";
 import { basicSchemaForm } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
 import Input from "../Library/Input";
+import Button from "../Library/Button";
 
-const Form = () => {
+const TaskList = () => {
+  const dateInputRef = useRef(null);
   const [taskList, setTaskList] = useState([]);
   const [form, setForm] = useState({ task: "", date: null });
   const [error, setError] = useState("");
   const [duplicateError, setDuplicateError] = useState("");
-  const dateInputRef = useRef(null);
 
   const handleChange = (value, name) => {
     if (name === "task") {
@@ -24,8 +25,7 @@ const Form = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     let counter = 0;
     taskList.forEach((el) => {
       if (form.task === el.task && form.date === el.date) {
@@ -44,8 +44,6 @@ const Form = () => {
       }, 1000);
     }
   };
-
-  console.log(form.date);
 
   return (
     <div className='d-flex flex-row justify-content-around'>
@@ -80,12 +78,12 @@ const Form = () => {
             error={error}
             duplicateError={duplicateError}
           />
-          <button
-            onSubmit={handleSubmit}
-            disabled={form.task === "" || form.date === null || error}
-          >
-            Aggiungi
-          </button>
+
+          <Button
+            name='Aggiungi'
+            handleClick={handleSubmit}
+            isDisabled={form.task === "" || form.date === null || error}
+          />
         </form>
       </div>
       <BackButton />
@@ -93,4 +91,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default TaskList;

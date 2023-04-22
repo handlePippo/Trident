@@ -1,4 +1,4 @@
-export default {
-  email: "valid@test.it",
-  password: "Test1234!",
+export const Credentials = {
+  email: "admin@test.it",
+  password: "Test1!",
 };
