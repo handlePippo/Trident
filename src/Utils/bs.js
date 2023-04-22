@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import moment from "moment";
 
 export const basicSchemaMeteo = Yup.object().shape({
   city: Yup.string()
@@ -8,15 +9,26 @@ export const basicSchemaMeteo = Yup.object().shape({
     .required("Obbligatorio"),
 });
 
+export const basicSchemaEurUsd = Yup.object().shape({
+  eur: Yup.string("L'euro deve essere espresso numericamente")
+    .max(9, "Troppo lungo!")
+    .required("Obbligatorio")
+    .matches(/^(?:\d+)$/, "Inserire solo numeri"),
+});
+
 export const basicSchemaForm = Yup.object().shape({
   task: Yup.string()
     .min(4, "Troppo corto!")
     .max(20, "Troppo lungo!")
     .matches(/^[a-zA-Z,\s]+$/, "Inserire solo lettere")
     .required("Obbligatorio"),
-  date: Yup.string().required("Obbligatorio"),
+  date: Yup.date()
+    .min(
+      moment().startOf("day"),
+      "La data non può essere precedente a quella di oggi"
+    )
+    .required("Inserisci la data!"),
 });
-
 // const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 // Minimo 5 caratteri, 1 lettera maiuscola, 1 lettera minuscola, 1 numero.
 

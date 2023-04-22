@@ -1,27 +1,42 @@
 import React, { useRef, useState } from "react";
-import { useFormik } from "formik";
 import { basicSchemaForm } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
+import Input from "../Library/Input";
 
 const Form = () => {
   const [taskList, setTaskList] = useState([]);
+  const [form, setForm] = useState({ task: "", date: null });
+  const [error, setError] = useState("");
   const [duplicateError, setDuplicateError] = useState("");
   const dateInputRef = useRef(null);
 
-  const addTask = () => {
-    const { task: fTask, date: fDate } = formik.values;
+  const handleChange = (value, name) => {
+    if (name === "task") {
+      setForm({ ...form, task: value });
+    } else if (name === "date") {
+      setForm({ ...form, date: value });
+    }
+    try {
+      basicSchemaForm.validateSync({ ...form, [name]: value });
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     let counter = 0;
     taskList.forEach((el) => {
-      if (fTask === el.task && fDate === el.date) {
+      if (form.task === el.task && form.date === el.date) {
         counter++;
       }
     });
     if (counter === 0) {
-      setTaskList([
-        ...taskList,
-        { task: formik.values.task, date: formik.values.date },
-      ]);
+      setTaskList([...taskList, { task: form.task, date: form.date }]);
       counter = 0;
+      setForm({ task: "", date: null });
+      dateInputRef.current.reset();
     } else {
       setDuplicateError("Per favore, non inserire doppioni!");
       setTimeout(() => {
@@ -30,23 +45,7 @@ const Form = () => {
     }
   };
 
-  const formik = useFormik({
-    initialValues: {
-      task: "",
-      date: null,
-    },
-    validationSchema: basicSchemaForm,
-    onSubmit: (values, actions) => {
-      addTask();
-      setTimeout(() => {
-        actions.resetForm({
-          task: "",
-          date: null,
-        });
-        dateInputRef.current.value = null;
-      }, 1000);
-    },
-  });
+  console.log(form.date);
 
   return (
     <div className='d-flex flex-row justify-content-around'>
@@ -63,44 +62,30 @@ const Form = () => {
         </ul>
       </div>
       <div className='d-flex'>
-        <form onSubmit={formik.handleSubmit} autoComplete='off'>
-          <label htmlFor='task'>Inserisci un Task</label>
-          <input
-            type='text'
-            id='task'
-            className={
-              formik.errors.task && formik.touched.task ? "input-error" : ""
-            }
-            value={formik.values.task}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            placeholder='Inserisci un Task'
+        <form onSubmit={handleSubmit} autoComplete='off' ref={dateInputRef}>
+          <Input
+            typeInput='text'
+            name='task'
+            label={"Inserisci un Task"}
+            value={form.task}
+            handleChange={handleChange}
+            placeholder='Es: fare la spesa'
           />
-          {formik.errors.task && formik.touched.task && (
-            <p className='error'>{formik.errors.task}</p>
-          )}
-          <label htmlFor='date'>Inserisci una data</label>
-          <input
-            type='date'
-            id='date'
-            ref={dateInputRef}
-            className={
-              formik.errors.date && formik.touched.date ? "input-error" : ""
-            }
-            value={formik.values.date}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+          <Input
+            name='date'
+            typeInput='date'
+            value={form.date}
+            handleChange={handleChange}
+            label='Inserisci una data'
+            error={error}
+            duplicateError={duplicateError}
           />
-          {formik.errors.date && formik.touched.date && (
-            <p className='error'>{formik.errors.date}</p>
-          )}
           <button
-            onSubmit={addTask}
-            disabled={formik.values.task === "" || formik.values.date === null}
+            onSubmit={handleSubmit}
+            disabled={form.task === "" || form.date === null || error}
           >
             Aggiungi
           </button>
-          {duplicateError && <p className='error'>{duplicateError}</p>}
         </form>
       </div>
       <BackButton />

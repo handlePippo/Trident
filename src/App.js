@@ -6,21 +6,39 @@ import MeteoPage from "./Routes/MeteoPage";
 import Tasklist from "./Routes/Tasklist";
 import LoginPage from "./Routes/LoginPage";
 import RegistrationPage from "./Routes/RegistrationPage";
+import ProtectedRoute from "./Routes/ProtectedRoute";
+import { createContext, useState } from "react";
+
+export const AuthContext = createContext(null);
 
 function App() {
+  const [auth, setAuth] = useState({});
+
   return (
-    <>
-      <Router>
+    <Router>
+      <AuthContext.Provider
+        value={{
+          setAuth,
+        }}
+      >
         <Routes>
-          <Route exact path='/' element={<LoginPage />} />
-          <Route path='/homepage' element={<Homepage />} />
+          <Route path='/' element={<LoginPage />} />
+          {/* <Route path='/homepage' element={<Homepage />} /> */}
           <Route path='/convertitore' element={<ConvertitorePage />} />
           <Route path='/meteo' element={<MeteoPage />} />
           <Route path='/tasklist' element={<Tasklist />} />
           <Route path='/registration' element={<RegistrationPage />} />
+          <Route
+            path='/homepage'
+            element={
+              <ProtectedRoute isAuth={auth}>
+                <Homepage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-      </Router>
-    </>
+      </AuthContext.Provider>
+    </Router>
   );
 }
 

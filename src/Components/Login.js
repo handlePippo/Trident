@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import BackButton from "../Utils/backBtn";
 import { useNavigate } from "react-router-dom";
 import { basicSchemaLogin } from "../Utils/bs";
+import { AuthContext } from "../App";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const { setAuth } = useContext(AuthContext);
 
   const formik = useFormik({
     initialValues: {
@@ -21,13 +24,18 @@ const Login = () => {
     },
   });
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setAuth(true);
+  };
+
   const registrationUser = () => {
     navigate("/registration");
   };
 
   return (
     <>
-      <form onSubmit={formik.handleSubmit} autoComplete='off'>
+      <form onSubmit={handleSubmit} autoComplete='off'>
         <label htmlFor='nome'>Nome</label>
         <input
           value={formik.values.name}
