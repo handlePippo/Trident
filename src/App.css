@@ -11,3 +11,23 @@ form label {
   text-align: left;
   margin: 1rem 0 0.2rem;
 }
+
+.todoimg {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  margin-top: -75px;
+  margin-left: 30px;
+}
+
+.eurh1 {
+  position: absolute;
+  left: 260px;
+  top: 22px;
+}
+
+.loading {
+  display: flex;
+  margin-top: -30px;
+  margin-left: 165px;
+}

@@ -6,51 +6,64 @@ import { AuthContext } from "../App";
 import Button from "../Library/Button";
 import Input from "../Library/Input";
 import { Credentials } from "../credentials";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
   const [error, setError] = useState("");
-  const [login, setLogin] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [internalStorage, setInternalStorage] = useState([]);
+  const [login, setLogin] = useState([]);
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const handleChange = (value, name) => {
-    if (name === "email") {
-      setLogin({ ...login, email: value });
-    } else if (name === "password") {
-      setLogin({ ...login, password: value });
-    } else {
-      setLogin({ ...login, confirmPassword: value });
-    }
-    try {
-      basicSchemaLogin.validateSync({ ...login, [name]: value });
-      setError("");
-    } catch (error) {
-      setError(error.message);
-    }
+  const handleChange = useCallback(
+    (value, name) => {
+      setLogin((prevState) => ({ ...prevState, [name]: value }));
+
+      const validateField = async () => {
+        try {
+          await basicSchemaLogin.validateAt(name, { ...login, [name]: value });
+          setError("");
+        } catch (error) {
+          setError(error.message);
+        }
+      };
+
+      validateField();
+    },
+    [login]
+  );
+
+  const checkLocalStorage = (item, storage) => {
+    return storage.some(
+      (el) => el.email === item.email && el.password === item.password
+    );
   };
 
   const handleSubmit = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
       if (
-        login.email === Credentials.email &&
-        login.password === Credentials.password
+        (login.email === Credentials.email &&
+          login.password === Credentials.password) ||
+        checkLocalStorage(login, internalStorage)
       ) {
         setAuth(true);
         navigate("/homepage");
       } else {
         setError("Dati di accesso errati! Riprovare.");
-        setTimeout(() => {
-          setError("");
-        }, 1500);
+        await wait(2000);
+        setError("");
       }
     },
-    [login.email, login.password, setAuth, navigate, setError]
+    [login, setAuth, navigate, setError, internalStorage]
   );
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem("users" || []));
+    if (data) {
+      setInternalStorage(data);
+    } else setInternalStorage([]);
+  }, []);
 
   const registrationUser = () => {
     navigate("/registration");
@@ -85,7 +98,11 @@ const Login = () => {
           error={error}
         />
 
-        <Button name='Accedi' type='submit' isDisabled={!!error} />
+        <Button
+          name='Accedi'
+          type='submit'
+          isDisabled={!!error || login.length === 0}
+        />
 
         <Button
           name='Registrati'

@@ -40,7 +40,7 @@ const Convertitore = () => {
   return (
     <div className='container'>
       <div className='d-flex justify-content-center'>
-        <div className='px-5 '>
+        <div className='px-5 position-relative '>
           <Input
             placeholder={"EUR €"}
             value={eur}
@@ -48,12 +48,13 @@ const Convertitore = () => {
             error={error}
             label={"Inserisci una cifra"}
           />
-          <h1>USD: {Math.round(eur / rate)} $</h1>
+          <h1 className='eurh1'>€</h1>
+          <h1>USD {Math.round(eur / rate)} $</h1>
         </div>
       </div>
       <div className='d-flex flex-column justify-content-center'>
         <Button
-          name={"+100"}
+          name={"+10"}
           handleClick={() => setEur(Number(eur) + 10)}
           isDisabled={!!error}
         />

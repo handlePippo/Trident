@@ -3,6 +3,8 @@ import { basicSchemaForm } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
 import Input from "../Library/Input";
 import Button from "../Library/Button";
+import ToDoImg from "../Utils/media/todoimg.png";
+import { useEffect } from "react";
 
 const TaskList = () => {
   const dateInputRef = useRef(null);
@@ -45,10 +47,23 @@ const TaskList = () => {
     }
   };
 
+  useEffect(() => {
+    if (taskList.length > 0) {
+      localStorage.setItem("tasklist", JSON.stringify(taskList));
+    }
+  }, [taskList]);
+
+  useEffect(() => {
+    let tasklist = JSON.parse(localStorage.getItem("tasklist"));
+    if (tasklist && tasklist.length > 0) {
+      setTaskList(tasklist);
+    }
+  }, []);
+
   return (
     <div className='d-flex flex-row justify-content-around'>
       <div className='d-flex flex-row '>
-        <h2 style={{ position: "absolute" }}>Tasklist:</h2>
+        <img className='todoimg' src={ToDoImg} alt='Tasklist' />
         <ul style={{ position: "relative", marginTop: "50px" }}>
           {taskList.map((el, index) => {
             return (

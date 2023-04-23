@@ -8,6 +8,7 @@ const Input = ({
   handleBlur,
   value,
   error,
+  success,
   placeholder,
   label,
   duplicateError = false,
@@ -29,6 +30,7 @@ const Input = ({
           placeholder={placeholder}
         />
         {error && <span className='error-t'>{error}</span>}
+        {success && <span className='success-t'>{success}</span>}
         {duplicateError && <span className='error-t'>{duplicateError}</span>}
       </label>
     </div>

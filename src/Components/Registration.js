@@ -3,19 +3,20 @@ import { basicSchemaRegistration } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
 import Button from "../Library/Button";
 import Input from "../Library/Input";
+import { useEffect } from "react";
+import { useCallback } from "react";
+import Loading from "../Utils/loading";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
+  const navigate = useNavigate();
   const dateInputRef = useRef(null);
   const [error, setError] = useState("");
-
-  const [registration, setRegistration] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    datanascita: null,
-  });
+  const [success, setSuccess] = useState("");
+  const [usersData, setUsersData] = useState([]);
+  const [registration, setRegistration] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleChange = (value, name) => {
     switch (name) {
@@ -38,7 +39,7 @@ const Registration = () => {
         setRegistration({ ...registration, datanascita: value });
         break;
       default:
-        setRegistration({ ...registration });
+        break;
     }
     try {
       basicSchemaRegistration.validateSync({
@@ -51,13 +52,45 @@ const Registration = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+  const handleSubmit = useCallback(async () => {
+    let counter = 0;
+    if (usersData) {
+      usersData.forEach((el) => {
+        if (el.email === registration.email) counter++;
+      });
+      if (counter === 0) {
+        setIsLoading(true);
+        setUsersData([...usersData, registration]);
+        localStorage.setItem(
+          "users",
+          JSON.stringify([...usersData, registration])
+        );
+        setError("");
+        await wait(2000);
+        setIsLoading(false);
+        setSuccess(
+          "Registrazione effettuata con successo! Puoi effettuare il login."
+        );
+        await wait(2000);
+        setSuccess("");
+        navigate("/");
+      } else {
+        setError("Utente già registrato!");
+      }
+      counter = 0;
+    }
+  }, [registration, usersData, navigate]);
+
+  useEffect(() => {
+    let users = JSON.parse(localStorage.getItem("users" || []));
+    if (users && users.length > 0) {
+      setUsersData(users);
+    }
+  }, []);
 
   return (
     <>
-      <form onSubmit={handleSubmit} autoComplete='off'>
+      <form autoComplete='off'>
         <Input
           value={registration.name}
           handleChange={handleChange}
@@ -103,9 +136,16 @@ const Registration = () => {
           name='confirmPassword'
           label='Conferma Password'
           placeholder='Inserisci nuovamente la password'
+          error={error}
+          success={success}
         />
 
-        <Button name='Registrati' isDisabled={!!error} />
+        <Button
+          name='Registrati'
+          handleClick={handleSubmit}
+          isDisabled={!!error || Object.keys(registration).length === 0}
+        />
+        {isLoading && <Loading color={"#4299E1"} />}
       </form>
       <BackButton goto='/' />
     </>
