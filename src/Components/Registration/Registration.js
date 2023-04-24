@@ -54,11 +54,11 @@ const Registration = () => {
         );
         setError("");
         await wait(2000);
-        setIsLoading(false);
         setSuccess(
-          "Registrazione effettuata con successo! Puoi effettuare il login."
+          "Registrazione effettuata con successo! Verrai rendirizzato alla pagina di login."
         );
         await wait(2000);
+        setIsLoading(false);
         setSuccess("");
         navigate("/");
       } else {
@@ -130,7 +130,9 @@ const Registration = () => {
         <Button
           name='Registrati'
           handleClick={handleSubmit}
-          isDisabled={!!error || Object.keys(registration).length === 0}
+          isDisabled={
+            !!error || Object.keys(registration).length === 0 || isLoading
+          }
         />
         {isLoading && <Loading color={"#4299E1"} />}
       </form>

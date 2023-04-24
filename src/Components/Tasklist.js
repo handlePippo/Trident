@@ -10,6 +10,7 @@ import { useEffect } from "react";
 const TaskList = () => {
   const dateInputRef = useRef(null);
   const [taskList, setTaskList] = useState([]);
+  const [currentUserData, setCurrentUserData] = useState([]);
   const [form, setForm] = useState({ task: "", date: null });
   const [error, setError] = useState("");
   const [duplicateError, setDuplicateError] = useState("");
@@ -44,7 +45,6 @@ const TaskList = () => {
     });
     if (counter === 0) {
       setTaskList([...taskList, { task: form.task, date: form.date }]);
-      counter = 0;
       setForm({ task: "", date: null });
       dateInputRef.current.reset();
     } else {
@@ -53,18 +53,27 @@ const TaskList = () => {
         setDuplicateError("");
       }, 1000);
     }
+    counter = 0;
   };
 
   useEffect(() => {
     if (taskList.length > 0) {
-      localStorage.setItem("tasklist", JSON.stringify(taskList));
+      localStorage.setItem(
+        `${currentUserData.email}_tasklist`,
+        JSON.stringify(taskList)
+      );
     }
-  }, [taskList]);
+  }, [taskList, currentUserData]);
 
   useEffect(() => {
-    let tasklist = JSON.parse(localStorage.getItem("tasklist"));
+    let user = JSON.parse(localStorage.getItem("currentUserData"));
+    let tasklist =
+      JSON.parse(localStorage.getItem(`${user.email}_tasklist`)) || [];
     if (tasklist && tasklist.length > 0) {
       setTaskList(tasklist);
+    }
+    if (user) {
+      setCurrentUserData(user);
     }
   }, []);
 

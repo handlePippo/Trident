@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import BackButton from "../../Utils/backBtn";
 import { useNavigate } from "react-router-dom";
 import { basicSchemaLogin } from "../../Utils/bs";
@@ -47,6 +47,7 @@ const Login = () => {
       checkLocalStorage(login, internalStorage)
     ) {
       setAuth(true);
+      localStorage.setItem("currentUserData", JSON.stringify(login));
       navigate("/homepage");
     } else {
       setError("Dati di accesso errati! Riprovare.");
@@ -64,6 +65,8 @@ const Login = () => {
   const registrationUser = () => {
     navigate("/registration");
   };
+
+  console.log(login);
 
   return (
     <>
@@ -111,5 +114,4 @@ const Login = () => {
     </>
   );
 };
-
 export default Login;
