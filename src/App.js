@@ -12,7 +12,8 @@ import { createContext, useState } from "react";
 export const AuthContext = createContext(null);
 
 function App() {
-  const [auth, setAuth] = useState({});
+  const isAuth = !!localStorage.getItem("currentUserData");
+  const [auth, setAuth] = useState(isAuth);
 
   return (
     <Router>
@@ -23,16 +24,44 @@ function App() {
       >
         <Routes>
           <Route path='/' element={<LoginPage />} />
-          {/* <Route path='/homepage' element={<Homepage />} /> */}
-          <Route path='/convertitore' element={<ConvertitorePage />} />
-          <Route path='/meteo' element={<MeteoPage />} />
-          <Route path='/tasklist' element={<TasklistPage />} />
           <Route path='/registration' element={<RegistrationPage />} />
           <Route
             path='/homepage'
             element={
               <ProtectedRoute isAuth={auth}>
                 <Homepage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/convertitore'
+            element={
+              <ProtectedRoute isAuth={auth}>
+                <ConvertitorePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/meteo'
+            element={
+              <ProtectedRoute isAuth={auth}>
+                <MeteoPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/tasklist'
+            element={
+              <ProtectedRoute isAuth={auth}>
+                <TasklistPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/registration'
+            element={
+              <ProtectedRoute isAuth={auth}>
+                <RegistrationPage />
               </ProtectedRoute>
             }
           />

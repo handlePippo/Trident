@@ -5,6 +5,7 @@ import TridentLogo from "../Utils/media/trident.png";
 import BackButton from "../Utils/backBtn";
 import Button from "../Library/Button";
 import { AuthContext } from "../App";
+import LoggedUser from "../Utils/loggedUser";
 
 const Homepage = () => {
   const { setAuth } = useContext(AuthContext);
@@ -41,6 +42,7 @@ const Homepage = () => {
         handleClick={handleClick}
         text='Logout'
       />
+      <LoggedUser />
     </div>
   );
 };

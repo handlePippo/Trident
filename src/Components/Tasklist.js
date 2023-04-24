@@ -77,9 +77,10 @@ const TaskList = () => {
 
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem("currentUserData"));
-    let tasklist =
-      JSON.parse(localStorage.getItem(`${user.email}_tasklist`)) || [];
-    if (tasklist && tasklist.length > 0) {
+    let tasklist = JSON.parse(
+      localStorage.getItem(`${user.email}_tasklist`) || "[]"
+    );
+    if (tasklist.length > 0) {
       setTaskList(tasklist);
     }
     if (user) {

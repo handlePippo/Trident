@@ -39,38 +39,42 @@ const Registration = () => {
     [registration]
   );
 
-  const handleSubmit = useCallback(async () => {
-    let counter = 0;
-    if (usersData) {
-      usersData.forEach((el) => {
-        if (el.email === registration.email) counter++;
-      });
-      if (counter === 0) {
-        setIsLoading(true);
-        setUsersData([...usersData, registration]);
-        localStorage.setItem(
-          "users",
-          JSON.stringify([...usersData, registration])
-        );
-        setError("");
-        await wait(3000);
-        setSuccess(
-          "Registrazione effettuata con successo! Verrai rendirizzato alla pagina di login."
-        );
-        await wait(2000);
-        setIsLoading(false);
-        setSuccess("");
-        navigate("/");
-      } else {
-        setError("Utente già registrato!");
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      let counter = 0;
+      if (usersData) {
+        usersData.forEach((el) => {
+          if (el.email === registration.email) counter++;
+        });
+        if (counter === 0) {
+          setIsLoading(true);
+          setUsersData([...usersData, registration]);
+          localStorage.setItem(
+            "users",
+            JSON.stringify([...usersData, registration])
+          );
+          setError("");
+          await wait(3000);
+          setSuccess(
+            "Registrazione effettuata con successo! Verrai rendirizzato alla pagina di login."
+          );
+          await wait(2000);
+          setIsLoading(false);
+          setSuccess("");
+          navigate("/");
+        } else {
+          setError("Utente già registrato!");
+        }
+        counter = 0;
       }
-      counter = 0;
-    }
-  }, [registration, usersData, navigate]);
+    },
+    [registration, usersData, navigate]
+  );
 
   useEffect(() => {
-    let users = JSON.parse(localStorage.getItem("users" || []));
-    if (users && users.length > 0) {
+    let users = JSON.parse(localStorage.getItem("users") || "[]");
+    if (users.length > 0) {
       setUsersData(users);
     }
   }, []);
@@ -130,6 +134,7 @@ const Registration = () => {
         <Button
           name='Registrati'
           handleClick={handleSubmit}
+          type='submit'
           isDisabled={
             !!error || Object.keys(registration).length === 0 || isLoading
           }

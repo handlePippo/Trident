@@ -14,7 +14,7 @@ const BackButton = ({
       <Link to={goto}>
         <img
           src={myimg}
-          alt='Torna alla Home'
+          alt='Torna indietro'
           style={{ height: "75px", width: "75px" }}
           className='d-flex justify-content-start position-absolute align-items-start'
           onClick={handleClick}

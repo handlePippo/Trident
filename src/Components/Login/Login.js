@@ -5,6 +5,7 @@ import { AuthContext } from "../../App";
 import Button from "../../Library/Button";
 import Input from "../../Library/Input";
 import { useEffect } from "react";
+import BackButton from "../../Utils/backBtn";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,21 +38,25 @@ const Login = () => {
     );
   };
 
-  const handleSubmit = useCallback(async () => {
-    if (checkLocalStorage(login, internalStorage)) {
-      setAuth(true);
-      localStorage.setItem("currentUserData", JSON.stringify(login));
-      navigate("/homepage");
-    } else {
-      setError("Dati di accesso errati! Riprovare.");
-      await wait(2000);
-      setError("");
-    }
-  }, [login, setAuth, navigate, setError, internalStorage]);
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (checkLocalStorage(login, internalStorage)) {
+        setAuth(true);
+        localStorage.setItem("currentUserData", JSON.stringify(login));
+        navigate("/homepage");
+      } else {
+        setError("Dati di accesso errati! Riprovare.");
+        await wait(2000);
+        setError("");
+      }
+    },
+    [login, setAuth, navigate, setError, internalStorage]
+  );
 
   useEffect(() => {
-    let data = JSON.parse(localStorage.getItem("users" || []));
-    if (data) {
+    let data = JSON.parse(localStorage.getItem("users") || "[]");
+    if (data.length > 0) {
       setInternalStorage(data);
     } else setInternalStorage([]);
   }, []);
@@ -102,6 +107,7 @@ const Login = () => {
           isDisabled={!!error}
         />
       </form>
+      <BackButton />
     </>
   );
 };
