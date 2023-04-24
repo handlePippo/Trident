@@ -6,9 +6,11 @@ const BackButton = ({
   handleClick,
   goto = "/homepage",
   myimg = backBtnImg,
+  text = "Indietro",
 }) => {
   return (
     <div style={{ position: "absolute", top: 0, left: 0, padding: 25 }}>
+      <p className='backDescription'>{text}</p>
       <Link to={goto}>
         <img
           src={myimg}

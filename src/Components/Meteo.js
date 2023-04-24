@@ -7,10 +7,10 @@ import Button from "../Library/Button";
 
 const Meteo = () => {
   const [meteo, setMeteo] = useState([]);
+  const [city, setCity] = useState("");
   const [error, setError] = useState("");
-  const [text, setText] = useState("");
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${text}&APPID=424e34f5fc142070d70c3073d0d1ba14`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=424e34f5fc142070d70c3073d0d1ba14`;
 
   const fetchData = useCallback(async () => {
     try {
@@ -30,7 +30,7 @@ const Meteo = () => {
   }, [url]);
 
   const handleChange = (value) => {
-    setText(value);
+    setCity(value);
     try {
       basicSchemaMeteo.validateSync({ city: value });
       setError("");
@@ -52,7 +52,7 @@ const Meteo = () => {
       <form onSubmit={handleSubmit} autoComplete='off'>
         <Input
           name='city'
-          value={text}
+          value={city}
           handleChange={handleChange}
           placeholder='Es: Rome, it'
           error={error}

@@ -26,7 +26,6 @@ const Login = () => {
           setError(error.message);
         }
       };
-
       validateField();
     },
     [login]
@@ -49,6 +48,7 @@ const Login = () => {
       setError("");
     }
   }, [login, setAuth, navigate, setError, internalStorage]);
+
   useEffect(() => {
     let data = JSON.parse(localStorage.getItem("users" || []));
     if (data) {
@@ -59,8 +59,6 @@ const Login = () => {
   const registrationUser = () => {
     navigate("/registration");
   };
-
-  console.log(login);
 
   return (
     <>

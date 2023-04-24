@@ -18,7 +18,6 @@ const TaskList = () => {
   const handleChange = useCallback(
     (value, name) => {
       setForm((prevState) => ({ ...prevState, [name]: value }));
-
       const validateField = async () => {
         try {
           await basicSchemaForm.validateAt(name, {
@@ -30,30 +29,41 @@ const TaskList = () => {
           setError(error.message);
         }
       };
-
       validateField();
     },
     [form]
   );
 
-  const handleSubmit = () => {
-    let counter = 0;
-    taskList.forEach((el) => {
-      if (form.task === el.task && form.date === el.date) {
-        counter++;
-      }
-    });
-    if (counter === 0) {
-      setTaskList([...taskList, { task: form.task, date: form.date }]);
-      setForm({ task: "", date: null });
-      dateInputRef.current.reset();
-    } else {
-      setDuplicateError("Per favore, non inserire doppioni!");
-      setTimeout(() => {
-        setDuplicateError("");
-      }, 1000);
+  const handleDeleteItem = (el) => {
+    setTaskList(taskList.filter((item) => item !== el));
+    if (taskList.length === 1) {
+      localStorage.removeItem(`${currentUserData.email}_tasklist`);
     }
-    counter = 0;
+  };
+
+  const addNewTask = (newTask) => {
+    if (!newTask.task || !newTask.date) {
+      setError("Inserisci una descrizione e una data per il task.");
+      return;
+    }
+
+    const isDuplicate = taskList.some(
+      (task) => task.task === newTask.task && task.date === newTask.date
+    );
+
+    if (isDuplicate) {
+      setDuplicateError("Questo task è già presente nella lista.");
+      return;
+    }
+
+    setTaskList([...taskList, newTask]);
+    setForm({ task: "", date: null });
+    dateInputRef.current.reset();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addNewTask({ task: form.task, date: form.date });
   };
 
   useEffect(() => {
@@ -77,18 +87,41 @@ const TaskList = () => {
     }
   }, []);
 
+  useEffect(() => {
+    taskList.filter((el) => el.deleted === false);
+  }, [taskList]);
+
+  const invertiData = (el) => {
+    if (!el.date) {
+      return "";
+    }
+    let data = el.date.split("-");
+    let container = [];
+    for (let i = data.length - 1; i >= 0; i--) {
+      container.push(data[i]);
+    }
+    return container.join("/");
+  };
+
+  console.log(taskList);
+
   return (
     <div className='d-flex flex-row justify-content-around'>
       <div className='d-flex flex-row '>
         <img className='todoimg' src={ToDoImg} alt='Tasklist' />
         <ul style={{ position: "relative", marginTop: "50px" }}>
-          {taskList.map((el) => {
-            return (
-              <li key={uuid()}>
-                {el.task} entro il: {el.date}
-              </li>
-            );
-          })}
+          {taskList
+            .sort((a, b) => new Date(a.date) - new Date(b.date))
+            .map((el) => {
+              return (
+                <div className='position-relative'>
+                  <li key={uuid()}>
+                    {el.task} <b>entro il:</b> {invertiData(el)}
+                    <button onClick={() => handleDeleteItem(el)}>X</button>
+                  </li>
+                </div>
+              );
+            })}
         </ul>
       </div>
       <div className='d-flex'>

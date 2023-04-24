@@ -11,14 +11,14 @@ const Homepage = () => {
 
   const handleClick = () => {
     setAuth(false);
+    localStorage.removeItem("currentUserData");
   };
   return (
     <div
       className='d-flex align-items-center justify-content-center flex-column'
       style={{ height: "100vh" }}
     >
-      <img src={TridentLogo}></img>
-
+      <img src={TridentLogo} alt='Logo' />
       <div className='d-flex mb-5 '>
         <Link to='/convertitore'>
           <Button name='Convertitore' />
@@ -35,7 +35,12 @@ const Homepage = () => {
         <h6>by Filippo Palliani</h6>
         <Button name='Portfolio' portfolio={true} />
       </div>
-      <BackButton goto={"/"} myimg={logOutImg} handleClick={handleClick} />
+      <BackButton
+        goto={"/"}
+        myimg={logOutImg}
+        handleClick={handleClick}
+        text='Logout'
+      />
     </div>
   );
 };

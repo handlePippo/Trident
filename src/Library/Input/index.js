@@ -6,7 +6,7 @@ const Input = ({
   name,
   handleChange,
   handleBlur,
-  value,
+  value = "",
   error,
   success,
   placeholder,
