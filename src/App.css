@@ -24,6 +24,12 @@ form label {
   position: absolute;
   left: 260px;
   top: 22px;
+  width: 1.5rem;
+  display: inline-block;
+}
+
+.usdh1 {
+  width: 244px;
 }
 
 .loading {

@@ -15,7 +15,6 @@ export const basicSchemaMeteo = Yup.object().shape({
 export const basicSchemaEurUsd = Yup.object().shape({
   eur: Yup.string("L'euro deve essere espresso numericamente")
     .max(9, "Troppo lungo!")
-    .required("Obbligatorio")
     .matches(/^(?:\d+)$/, "Inserire solo numeri"),
 });
 
@@ -47,7 +46,10 @@ export const basicSchemaRegistration = Yup.object().shape({
   email: Yup.string()
     .email("Inserisci un'email valida")
     .required("Impossibile proseguire senza inserire email"),
-  datanascita: Yup.string().required("Inserisci la tua data di nascita"),
+  datanascita: Yup.date().max(
+    moment().endOf("day"),
+    "La data non può essere successiva a quella di oggi"
+  ),
   password: Yup.string()
     .min(5, "Minimo 5 caratteri")
     .matches(passwordRules, { message: "Password debole, riprova" })

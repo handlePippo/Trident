@@ -12,6 +12,7 @@ const Input = ({
   placeholder,
   label,
   duplicateError = false,
+  isDisabled = false,
 }) => {
   const onChange = (e) => {
     handleChange(e.target.value, name);
@@ -28,6 +29,7 @@ const Input = ({
           onChange={onChange}
           value={value}
           placeholder={placeholder}
+          disabled={isDisabled}
         />
         {error && <span className='error-t'>{error}</span>}
         {success && <span className='success-t'>{success}</span>}

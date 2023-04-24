@@ -1,11 +1,11 @@
 import React, { useCallback, useContext, useState } from "react";
-import BackButton from "../Utils/backBtn";
+import BackButton from "../../Utils/backBtn";
 import { useNavigate } from "react-router-dom";
-import { basicSchemaLogin } from "../Utils/bs";
-import { AuthContext } from "../App";
-import Button from "../Library/Button";
-import Input from "../Library/Input";
-import { Credentials } from "../credentials";
+import { basicSchemaLogin } from "../../Utils/bs";
+import { AuthContext } from "../../App";
+import Button from "../../Library/Button";
+import Input from "../../Library/Input";
+import { Credentials } from "../../credentials";
 import { useEffect } from "react";
 
 const Login = () => {
@@ -40,24 +40,20 @@ const Login = () => {
     );
   };
 
-  const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-      if (
-        (login.email === Credentials.email &&
-          login.password === Credentials.password) ||
-        checkLocalStorage(login, internalStorage)
-      ) {
-        setAuth(true);
-        navigate("/homepage");
-      } else {
-        setError("Dati di accesso errati! Riprovare.");
-        await wait(2000);
-        setError("");
-      }
-    },
-    [login, setAuth, navigate, setError, internalStorage]
-  );
+  const handleSubmit = useCallback(async () => {
+    if (
+      (login.email === Credentials.email &&
+        login.password === Credentials.password) ||
+      checkLocalStorage(login, internalStorage)
+    ) {
+      setAuth(true);
+      navigate("/homepage");
+    } else {
+      setError("Dati di accesso errati! Riprovare.");
+      await wait(2000);
+      setError("");
+    }
+  }, [login, setAuth, navigate, setError, internalStorage]);
   useEffect(() => {
     let data = JSON.parse(localStorage.getItem("users" || []));
     if (data) {
@@ -71,7 +67,7 @@ const Login = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit} autoComplete='off'>
+      <form>
         <Input
           value={login.email}
           handleChange={handleChange}
@@ -102,6 +98,7 @@ const Login = () => {
           name='Accedi'
           type='submit'
           isDisabled={!!error || login.length === 0}
+          handleClick={handleSubmit}
         />
 
         <Button
@@ -109,8 +106,8 @@ const Login = () => {
           handleClick={registrationUser}
           isDisabled={!!error}
         />
-        <BackButton />
       </form>
+      <BackButton />
     </>
   );
 };

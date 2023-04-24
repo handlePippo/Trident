@@ -33,6 +33,11 @@ const Convertitore = () => {
     }
   };
 
+  const resetField = () => {
+    setEur("");
+    setError("");
+  };
+
   useEffect(() => {
     fetchData(apiUrl);
   }, []);
@@ -47,9 +52,10 @@ const Convertitore = () => {
             handleChange={handleChange}
             error={error}
             label={"Inserisci una cifra"}
+            isDisabled={error === "Troppo lungo!"}
           />
           <h1 className='eurh1'>€</h1>
-          <h1>USD {Math.round(eur / rate)} $</h1>
+          <h1 className='usdh1'>{Math.round(eur / rate)} $</h1>
         </div>
       </div>
       <div className='d-flex flex-column justify-content-center'>
@@ -64,11 +70,7 @@ const Convertitore = () => {
           isDisabled={!!error}
         />
       </div>
-      <Button
-        name={"Reset"}
-        handleClick={() => setEur(0)}
-        isDisabled={!!error}
-      />
+      <Button name={"Reset"} handleClick={resetField} />
       <BackButton />
     </div>
   );

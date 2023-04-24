@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { basicSchemaForm } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
 import Input from "../Library/Input";
 import Button from "../Library/Button";
 import ToDoImg from "../Utils/media/todoimg.png";
+import uuid from "react-uuid";
 import { useEffect } from "react";
 
 const TaskList = () => {
@@ -13,19 +14,26 @@ const TaskList = () => {
   const [error, setError] = useState("");
   const [duplicateError, setDuplicateError] = useState("");
 
-  const handleChange = (value, name) => {
-    if (name === "task") {
-      setForm({ ...form, task: value });
-    } else if (name === "date") {
-      setForm({ ...form, date: value });
-    }
-    try {
-      basicSchemaForm.validateSync({ ...form, [name]: value });
-      setError("");
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+  const handleChange = useCallback(
+    (value, name) => {
+      setForm((prevState) => ({ ...prevState, [name]: value }));
+
+      const validateField = async () => {
+        try {
+          await basicSchemaForm.validateAt(name, {
+            ...form,
+            [name]: value,
+          });
+          setError("");
+        } catch (error) {
+          setError(error.message);
+        }
+      };
+
+      validateField();
+    },
+    [form]
+  );
 
   const handleSubmit = () => {
     let counter = 0;
@@ -65,9 +73,9 @@ const TaskList = () => {
       <div className='d-flex flex-row '>
         <img className='todoimg' src={ToDoImg} alt='Tasklist' />
         <ul style={{ position: "relative", marginTop: "50px" }}>
-          {taskList.map((el, index) => {
+          {taskList.map((el) => {
             return (
-              <li key={index}>
+              <li key={uuid()}>
                 {el.task} entro il: {el.date}
               </li>
             );

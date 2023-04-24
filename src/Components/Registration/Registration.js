@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
-import { basicSchemaRegistration } from "../Utils/bs";
-import BackButton from "../Utils/backBtn";
-import Button from "../Library/Button";
-import Input from "../Library/Input";
+import { basicSchemaRegistration } from "../../Utils/bs";
+import BackButton from "../../Utils/backBtn";
+import Button from "../../Library/Button";
+import Input from "../../Library/Input";
 import { useEffect } from "react";
 import { useCallback } from "react";
-import Loading from "../Utils/loading";
+import Loading from "../../Utils/loading";
 import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
@@ -18,39 +18,26 @@ const Registration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const handleChange = (value, name) => {
-    switch (name) {
-      case "name":
-        setRegistration({ ...registration, name: value });
-        break;
-      case "surname":
-        setRegistration({ ...registration, surname: value });
-        break;
-      case "email":
-        setRegistration({ ...registration, email: value });
-        break;
-      case "password":
-        setRegistration({ ...registration, password: value });
-        break;
-      case "confirmPassword":
-        setRegistration({ ...registration, confirmPassword: value });
-        break;
-      case "datanascita":
-        setRegistration({ ...registration, datanascita: value });
-        break;
-      default:
-        break;
-    }
-    try {
-      basicSchemaRegistration.validateSync({
-        ...registration,
-        [name]: value,
-      });
-      setError("");
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+  const handleChange = useCallback(
+    (value, name) => {
+      setRegistration((prevState) => ({ ...prevState, [name]: value }));
+
+      const validateField = async () => {
+        try {
+          await basicSchemaRegistration.validateAt(name, {
+            ...registration,
+            [name]: value,
+          });
+          setError("");
+        } catch (error) {
+          setError(error.message);
+        }
+      };
+
+      validateField();
+    },
+    [registration]
+  );
 
   const handleSubmit = useCallback(async () => {
     let counter = 0;
@@ -90,7 +77,7 @@ const Registration = () => {
 
   return (
     <>
-      <form autoComplete='off'>
+      <form>
         <Input
           value={registration.name}
           handleChange={handleChange}
