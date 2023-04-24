@@ -15,7 +15,7 @@ export const basicSchemaMeteo = Yup.object().shape({
 export const basicSchemaEurUsd = Yup.object().shape({
   eur: Yup.string("L'euro deve essere espresso numericamente")
     .max(9, "Troppo lungo!")
-    .matches(/^(?:\d+)$/, "Inserire solo numeri"),
+    .matches(/^(?:\d+)?$/, "Inserire solo numeri"),
 });
 
 export const basicSchemaForm = Yup.object().shape({

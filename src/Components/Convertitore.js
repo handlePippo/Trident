@@ -24,7 +24,6 @@ const Convertitore = () => {
 
   const handleChange = (value) => {
     setEur(value);
-    console.log(value);
     try {
       basicSchemaEurUsd.validateSync({ eur: value });
       setError("");
@@ -52,7 +51,7 @@ const Convertitore = () => {
             handleChange={handleChange}
             error={error}
             label={"Inserisci una cifra"}
-            isDisabled={error === "Troppo lungo!"}
+            isDisabled={error}
           />
           <h1 className='eurh1'>€</h1>
           <h1 className='usdh1'>{Math.round(eur / rate)} $</h1>

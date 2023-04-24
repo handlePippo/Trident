@@ -1,11 +1,9 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
-import BackButton from "../../Utils/backBtn";
+import React, { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { basicSchemaLogin } from "../../Utils/bs";
 import { AuthContext } from "../../App";
 import Button from "../../Library/Button";
 import Input from "../../Library/Input";
-import { Credentials } from "../../credentials";
 import { useEffect } from "react";
 
 const Login = () => {
@@ -41,11 +39,7 @@ const Login = () => {
   };
 
   const handleSubmit = useCallback(async () => {
-    if (
-      (login.email === Credentials.email &&
-        login.password === Credentials.password) ||
-      checkLocalStorage(login, internalStorage)
-    ) {
+    if (checkLocalStorage(login, internalStorage)) {
       setAuth(true);
       localStorage.setItem("currentUserData", JSON.stringify(login));
       navigate("/homepage");
@@ -110,7 +104,6 @@ const Login = () => {
           isDisabled={!!error}
         />
       </form>
-      <BackButton />
     </>
   );
 };

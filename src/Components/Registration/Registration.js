@@ -53,7 +53,7 @@ const Registration = () => {
           JSON.stringify([...usersData, registration])
         );
         setError("");
-        await wait(2000);
+        await wait(3000);
         setSuccess(
           "Registrazione effettuata con successo! Verrai rendirizzato alla pagina di login."
         );
