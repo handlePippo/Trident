@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
-import { basicSchemaRegistration } from "../../Utils/bs";
-import BackButton from "../../Utils/backBtn";
-import Button from "../../Library/Button";
-import Input from "../../Library/Input";
+import { basicSchemaRegistration } from "../Utils/bs";
+import BackButton from "../Utils/backBtn";
+import Button from "../Library/Button";
+import Input from "../Library/Input";
 import { useEffect } from "react";
 import { useCallback } from "react";
-import Loading from "../../Utils/loading";
+import Loading from "../Utils/loading";
 import { useNavigate } from "react-router-dom";
 
 const Registration = () => {

@@ -32,7 +32,7 @@ const Convertitore = () => {
     }
   };
 
-  const resetField = () => {
+  const resetFields = () => {
     setEur("");
     setError("");
   };
@@ -69,7 +69,7 @@ const Convertitore = () => {
           isDisabled={!!error}
         />
       </div>
-      <Button name={"Reset"} handleClick={resetField} />
+      <Button name={"Reset"} handleClick={resetFields} />
       <BackButton />
     </div>
   );

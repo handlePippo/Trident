@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginToHomepage from "../../Utils/media/logintohomepage.png";
-import { basicSchemaLogin } from "../../Utils/bs";
-import { AuthContext } from "../../App";
-import Button from "../../Library/Button";
-import Input from "../../Library/Input";
-import BackButton from "../../Utils/backBtn";
-import LoggedUser from "../../Utils/loggedUser";
+import LoginToHomepage from "../Utils/media/logintohomepage.png";
+import { basicSchemaLogin } from "../Utils/bs";
+import { AuthContext } from "../App";
+import Button from "../Library/Button";
+import Input from "../Library/Input";
+import BackButton from "../Utils/backBtn";
+import LoggedUser from "../Utils/loggedUser";
 
 const Login = () => {
   const navigate = useNavigate();
