@@ -74,38 +74,42 @@ const Login = () => {
   return (
     <>
       <form>
-        <Input
-          value={login.email}
-          handleChange={handleChange}
-          typeInput='email'
-          name='email'
-          placeholder='Inserisci la tua mail'
-          label='Email'
-        />
-        <Input
-          value={login.password}
-          handleChange={handleChange}
-          typeInput='password'
-          name='password'
-          placeholder='Inserisci la tua password'
-          label='Password'
-        />
-        <Input
-          value={login.confirmPassword}
-          handleChange={handleChange}
-          typeInput='password'
-          name='confirmPassword'
-          placeholder='Inserisci di nuovo la tua password'
-          label='Conferma Password'
-          error={error}
-        />
+        {!isLogged && (
+          <>
+            <Input
+              value={login.email}
+              handleChange={handleChange}
+              typeInput='email'
+              name='email'
+              placeholder='Inserisci la tua mail'
+              label='Email'
+            />
+            <Input
+              value={login.password}
+              handleChange={handleChange}
+              typeInput='password'
+              name='password'
+              placeholder='Inserisci la tua password'
+              label='Password'
+            />
+            <Input
+              value={login.confirmPassword}
+              handleChange={handleChange}
+              typeInput='password'
+              name='confirmPassword'
+              placeholder='Inserisci di nuovo la tua password'
+              label='Conferma Password'
+              error={error}
+            />
 
-        <Button
-          name='Accedi'
-          type='submit'
-          isDisabled={!!error || login.length === 0}
-          handleClick={handleSubmit}
-        />
+            <Button
+              name='Accedi'
+              type='submit'
+              isDisabled={!!error || login.length === 0}
+              handleClick={handleSubmit}
+            />
+          </>
+        )}
 
         <Button
           name='Registrati'

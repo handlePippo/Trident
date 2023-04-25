@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const LoggedUser = () => {
   const [usersData, setUsersData] = useState([]);
   const [currentUserData, setCurrentUserData] = useState({});
 
-  const currentUser = usersData
-    .filter((el) => el.email === currentUserData.email)
-    .map((el) => `Benvenuto ${el.name} ${el.surname}`);
+  const currentUser = useMemo(() => {
+    return usersData
+      .filter((el) => el.email === currentUserData.email)
+      .map((el) => `Benvenuto ${el.name} ${el.surname}`);
+  }, [usersData, currentUserData]);
 
   useEffect(() => {
     let users = JSON.parse(localStorage.getItem("users") || "[]");
@@ -23,7 +25,11 @@ const LoggedUser = () => {
 
   return (
     <div className='logged-user'>
-      {currentUser.length > 0 ? <p>{currentUser}</p> : <p>Effettua il login</p>}
+      {currentUser.length > 0 ? (
+        <p>{currentUser}</p>
+      ) : (
+        <p>Effettua il login o registrati</p>
+      )}
     </div>
   );
 };

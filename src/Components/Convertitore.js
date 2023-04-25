@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Input from "../Library/Input";
 import { basicSchemaEurUsd } from "../Utils/bs";
@@ -11,6 +11,10 @@ const Convertitore = () => {
   const [rate, setRate] = useState(0);
   const [eur, setEur] = useState(null);
   const [error, setError] = useState("");
+
+  const conversion = useMemo(() => {
+    return Math.round(eur / rate);
+  }, [eur, rate]);
 
   const fetchData = (url) => {
     try {
@@ -54,7 +58,7 @@ const Convertitore = () => {
             isDisabled={error}
           />
           <h1 className='eurh1'>€</h1>
-          <h1 className='usdh1'>{Math.round(eur / rate)} $</h1>
+          <h1 className='usdh1'>{conversion} $</h1>
         </div>
       </div>
       <div className='d-flex flex-column justify-content-center'>
