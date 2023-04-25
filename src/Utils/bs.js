@@ -8,7 +8,10 @@ export const basicSchemaMeteo = Yup.object().shape({
   city: Yup.string()
     .min(4, "Troppo corto!")
     .max(20, "Troppo lungo!")
-    .matches(/^[a-zA-Z,\s]+$/, "Inserire solo lettere")
+    .matches(
+      /^[a-zA-Z,\s]+$/,
+      "Inserire solo lettere e virgole per indicare lo stato"
+    )
     .required("Obbligatorio"),
 });
 

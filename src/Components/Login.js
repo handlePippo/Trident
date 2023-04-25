@@ -65,16 +65,20 @@ const Login = () => {
     if (Object.values(currentUser).length > 0) setIsLogged(true);
   }, []);
 
-  console.log(isLogged);
-
   const registrationUser = () => {
     navigate("/registration");
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("currentUserData");
+    setAuth(false);
+    window.location.reload();
   };
 
   return (
     <>
       <form>
-        {!isLogged && (
+        {!isLogged ? (
           <>
             <Input
               value={login.email}
@@ -108,14 +112,16 @@ const Login = () => {
               isDisabled={!!error || login.length === 0}
               handleClick={handleSubmit}
             />
-          </>
-        )}
 
-        <Button
-          name='Registrati'
-          handleClick={registrationUser}
-          isDisabled={!!error}
-        />
+            <Button
+              name='Registrati'
+              handleClick={registrationUser}
+              isDisabled={!!error}
+            />
+          </>
+        ) : (
+          <Button name='Logout' handleClick={handleLogOut} />
+        )}
       </form>
       {isLogged && <BackButton text='Homepage' myimg={LoginToHomepage} />}
       <LoggedUser />

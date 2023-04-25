@@ -12,14 +12,12 @@ const Meteo = () => {
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=424e34f5fc142070d70c3073d0d1ba14`;
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(() => {
     try {
       axios
         .get(url)
         .then((response) => {
-          console.log(response.data);
           setMeteo(response.data);
-          console.log(response);
         })
         .catch(() => {
           setError("Impossibile individuare questa città");
