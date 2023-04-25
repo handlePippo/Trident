@@ -44,3 +44,14 @@ form label {
   left: 110px;
   font-weight: 600;
 }
+
+.logged-user {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 25px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}

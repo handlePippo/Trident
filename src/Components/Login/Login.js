@@ -1,16 +1,18 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useEffect, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoginToHomepage from "../../Utils/media/logintohomepage.png";
 import { basicSchemaLogin } from "../../Utils/bs";
 import { AuthContext } from "../../App";
 import Button from "../../Library/Button";
 import Input from "../../Library/Input";
-import { useEffect } from "react";
 import BackButton from "../../Utils/backBtn";
+import LoggedUser from "../../Utils/loggedUser";
 
 const Login = () => {
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
   const [error, setError] = useState("");
+  const [isLogged, setIsLogged] = useState(false);
   const [internalStorage, setInternalStorage] = useState([]);
   const [login, setLogin] = useState([]);
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -56,10 +58,14 @@ const Login = () => {
 
   useEffect(() => {
     let data = JSON.parse(localStorage.getItem("users") || "[]");
-    if (data.length > 0) {
-      setInternalStorage(data);
-    } else setInternalStorage([]);
+    let currentUser = JSON.parse(
+      localStorage.getItem("currentUserData") || "[]"
+    );
+    setInternalStorage(data);
+    if (Object.values(currentUser).length > 0) setIsLogged(true);
   }, []);
+
+  console.log(isLogged);
 
   const registrationUser = () => {
     navigate("/registration");
@@ -107,7 +113,8 @@ const Login = () => {
           isDisabled={!!error}
         />
       </form>
-      <BackButton />
+      {isLogged && <BackButton text='Homepage' myimg={LoginToHomepage} />}
+      <LoggedUser />
     </>
   );
 };

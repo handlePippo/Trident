@@ -21,7 +21,11 @@ const LoggedUser = () => {
     }
   }, []);
 
-  return <div>{<p>{currentUser}</p>}</div>;
+  return (
+    <div className='logged-user'>
+      {currentUser.length > 0 ? <p>{currentUser}</p> : <p>Effettua il login</p>}
+    </div>
+  );
 };
 
 export default LoggedUser;
