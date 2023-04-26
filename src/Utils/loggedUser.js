@@ -26,9 +26,7 @@ const LoggedUser = () => {
   return (
     <div className='logged-user'>
       {currentUser.length > 0 ? (
-        <div>
-          <p className='logged-user-p'>{currentUser}</p>
-        </div>
+        <p>{currentUser}</p>
       ) : (
         <p>Effettua il login o registrati</p>
       )}
