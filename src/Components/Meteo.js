@@ -1,14 +1,16 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { basicSchemaMeteo } from "../Utils/bs";
 import axios from "axios";
 import BackButton from "../Utils/backBtn";
 import Input from "../Library/Input";
 import Button from "../Library/Button";
+import { ReducerContext } from "./Reducer/wrapper";
 
 const Meteo = () => {
   const [meteo, setMeteo] = useState([]);
   const [city, setCity] = useState("");
-  const [error, setError] = useState("");
+  const [state, dispatch] = useContext(ReducerContext);
+  const { error } = state;
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=424e34f5fc142070d70c3073d0d1ba14`;
 
@@ -20,20 +22,32 @@ const Meteo = () => {
           setMeteo(response.data);
         })
         .catch(() => {
-          setError("Impossibile individuare questa città");
+          dispatch({
+            type: "ERROR",
+            payload: "Impossibile individuare questa città",
+          });
         });
     } catch (e) {
-      setError(e.message);
+      dispatch({
+        type: "ERROR",
+        payload: e.message,
+      });
     }
-  }, [url]);
+  }, [url, dispatch]);
 
   const handleChange = (value) => {
     setCity(value);
     try {
       basicSchemaMeteo.validateSync({ city: value });
-      setError("");
+      dispatch({
+        type: "ERROR",
+        payload: "",
+      });
     } catch (error) {
-      setError(error.message);
+      dispatch({
+        type: "ERROR",
+        payload: error.message,
+      });
     }
   };
 

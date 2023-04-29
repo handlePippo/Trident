@@ -1,49 +1,71 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import axios from "axios";
 import Input from "../Library/Input";
-import { basicSchemaEurUsd } from "../Utils/bs";
 import Button from "../Library/Button";
 import BackButton from "../Utils/backBtn";
+import { basicSchemaEurUsd } from "../Utils/bs";
+import { ReducerContext } from "./Reducer/wrapper";
 
 const Convertitore = () => {
   const apiUrl = "https://api.api-ninjas.com/v1/exchangerate?pair=USD_EUR";
 
   const [rate, setRate] = useState(0);
-  const [eur, setEur] = useState(null);
-  const [error, setError] = useState("");
+  const [eur, setEur] = useState("");
+
+  const [state, dispatch] = useContext(ReducerContext);
+  const { error } = state;
 
   const conversion = useMemo(() => {
     return Math.round(eur / rate);
   }, [eur, rate]);
 
-  const fetchData = (url) => {
+  const fetchData = useCallback(() => {
     try {
-      axios.get(url).then((response) => {
+      axios.get(apiUrl).then((response) => {
+        console.log(response);
         setRate(Number(response.data.exchange_rate));
       });
     } catch (error) {
-      setError(error.message);
+      dispatch({
+        type: "ERROR",
+        payload: error.message,
+      });
     }
-  };
+  }, [dispatch, setRate]);
 
   const handleChange = (value) => {
     setEur(value);
     try {
       basicSchemaEurUsd.validateSync({ eur: value });
-      setError("");
+      dispatch({
+        type: "ERROR",
+        payload: "",
+      });
     } catch (error) {
-      setError(error.message);
+      dispatch({
+        type: "ERROR",
+        payload: error.message,
+      });
     }
   };
 
   const resetFields = () => {
     setEur("");
-    setError("");
+    dispatch({
+      type: "ERROR",
+      payload: "",
+    });
   };
 
   useEffect(() => {
-    fetchData(apiUrl);
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className='container'>

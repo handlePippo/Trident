@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { basicSchemaRegistration } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
 import Button from "../Library/Button";
@@ -7,16 +7,20 @@ import { useEffect } from "react";
 import { useCallback } from "react";
 import Loading from "../Utils/loading";
 import { useNavigate } from "react-router-dom";
+import { ReducerContext } from "./Reducer/wrapper";
 
 const Registration = () => {
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   const navigate = useNavigate();
   const dateInputRef = useRef(null);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [usersData, setUsersData] = useState([]);
+
   const [registration, setRegistration] = useState({});
+  const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const [state, dispatch] = useContext(ReducerContext);
+  const { error, usersData } = state;
 
   const handleChange = useCallback(
     (value, name) => {
@@ -28,15 +32,21 @@ const Registration = () => {
             ...registration,
             [name]: value,
           });
-          setError("");
+          dispatch({
+            type: "ERROR",
+            payload: "",
+          });
         } catch (error) {
-          setError(error.message);
+          dispatch({
+            type: "ERROR",
+            payload: error.message,
+          });
         }
       };
 
       validateField();
     },
-    [registration]
+    [registration, dispatch]
   );
 
   const handleSubmit = useCallback(
@@ -49,12 +59,18 @@ const Registration = () => {
         });
         if (counter === 0) {
           setIsLoading(true);
-          setUsersData([...usersData, registration]);
+          dispatch({
+            type: "USERS_DATA",
+            payload: [...usersData, registration],
+          });
           localStorage.setItem(
             "users",
             JSON.stringify([...usersData, registration])
           );
-          setError("");
+          dispatch({
+            type: "ERROR",
+            payload: "",
+          });
           await wait(3000);
           setSuccess(
             "Registrazione effettuata con successo! Verrai rendirizzato alla pagina di login."
@@ -64,20 +80,26 @@ const Registration = () => {
           setSuccess("");
           navigate("/");
         } else {
-          setError("Utente già registrato!");
+          dispatch({
+            type: "ERROR",
+            payload: "Utente già registrato!",
+          });
         }
         counter = 0;
       }
     },
-    [registration, usersData, navigate]
+    [registration, usersData, dispatch, navigate]
   );
 
   useEffect(() => {
     let users = JSON.parse(localStorage.getItem("users") || "[]");
     if (users.length > 0) {
-      setUsersData(users);
+      dispatch({
+        type: "USERS_DATA",
+        payload: users,
+      });
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

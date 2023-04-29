@@ -4,14 +4,17 @@ import logOutImg from "../../src/Utils/media/logout.png";
 import TridentLogo from "../Utils/media/trident.png";
 import BackButton from "../Utils/backBtn";
 import Button from "../Library/Button";
-import { AuthContext } from "../App";
 import LoggedUser from "../Utils/loggedUser";
+import { ReducerContext } from "./Reducer/wrapper";
 
 const Homepage = () => {
-  const { setAuth } = useContext(AuthContext);
+  const [state, dispatch] = useContext(ReducerContext);
 
   const handleClick = () => {
-    setAuth(false);
+    dispatch({
+      type: "SET_AUTH",
+      payload: false,
+    });
     localStorage.removeItem("currentUserData");
   };
   return (

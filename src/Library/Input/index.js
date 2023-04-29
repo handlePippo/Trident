@@ -40,17 +40,3 @@ const Input = ({
 };
 
 export default Input;
-
-// const prova = () => {
-//   const [text, setText] = useState("");
-
-//   return (
-//     <>
-//       <Input
-//         name={"name"}
-//         handleChange={(e, name) => setText(e)}
-//         value={text}
-//       />
-//     </>
-//   );
-// };

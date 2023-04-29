@@ -2,20 +2,21 @@ import React, { useEffect, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginToHomepage from "../Utils/media/logintohomepage.png";
 import { basicSchemaLogin } from "../Utils/bs";
-import { AuthContext } from "../App";
 import Button from "../Library/Button";
 import Input from "../Library/Input";
 import BackButton from "../Utils/backBtn";
 import LoggedUser from "../Utils/loggedUser";
+import { ReducerContext } from "./Reducer/wrapper";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
-  const [error, setError] = useState("");
-  const [isLogged, setIsLogged] = useState(false);
-  const [internalStorage, setInternalStorage] = useState([]);
-  const [login, setLogin] = useState([]);
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const [isLogged, setIsLogged] = useState(false);
+  const [login, setLogin] = useState([]);
+
+  const [state, dispatch] = useContext(ReducerContext);
+  const { error, usersData } = state;
 
   const handleChange = useCallback(
     (value, name) => {
@@ -24,14 +25,20 @@ const Login = () => {
       const validateField = async () => {
         try {
           await basicSchemaLogin.validateAt(name, { ...login, [name]: value });
-          setError("");
+          dispatch({
+            type: "ERROR",
+            payload: "",
+          });
         } catch (error) {
-          setError(error.message);
+          dispatch({
+            type: "ERROR",
+            payload: error.message,
+          });
         }
       };
       validateField();
     },
-    [login]
+    [login, dispatch]
   );
 
   const checkLocalStorage = (item, storage) => {
@@ -43,17 +50,26 @@ const Login = () => {
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-      if (checkLocalStorage(login, internalStorage)) {
-        setAuth(true);
+      if (checkLocalStorage(login, usersData)) {
+        dispatch({
+          type: "SET_AUTH",
+          payload: true,
+        });
         localStorage.setItem("currentUserData", JSON.stringify(login));
         navigate("/homepage");
       } else {
-        setError("Dati di accesso errati! Riprovare.");
+        dispatch({
+          type: "ERROR",
+          payload: "Dati di accesso errati! Riprovare.",
+        });
         await wait(2000);
-        setError("");
+        dispatch({
+          type: "ERROR",
+          payload: "",
+        });
       }
     },
-    [login, setAuth, navigate, setError, internalStorage]
+    [login, dispatch, usersData, navigate]
   );
 
   useEffect(() => {
@@ -61,9 +77,13 @@ const Login = () => {
     let currentUser = JSON.parse(
       localStorage.getItem("currentUserData") || "[]"
     );
-    setInternalStorage(data);
+    dispatch({
+      type: "USERS_DATA",
+      payload: data,
+    });
     if (Object.values(currentUser).length > 0) setIsLogged(true);
-  }, []);
+    console.log(currentUser);
+  }, [dispatch]);
 
   const registrationUser = () => {
     navigate("/registration");
@@ -71,7 +91,10 @@ const Login = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("currentUserData");
-    setAuth(false);
+    dispatch({
+      type: "SET_AUTH",
+      dispatch: false,
+    });
     window.location.reload();
   };
 

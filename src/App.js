@@ -1,4 +1,5 @@
 import "./App.css";
+import { useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Homepage from "./Components/Homepage";
 import ConvertitorePage from "./Routes/ConvertitorePage";
@@ -7,66 +8,58 @@ import TasklistPage from "./Routes/TasklistPage";
 import LoginPage from "./Routes/LoginPage";
 import RegistrationPage from "./Routes/RegistrationPage";
 import ProtectedRoute from "./Routes/ProtectedRoute";
-import { createContext, useState } from "react";
-
-export const AuthContext = createContext(null);
+import { ReducerContext } from "./Components/Reducer/wrapper";
 
 function App() {
-  const isAuth = !!localStorage.getItem("currentUserData");
-  const [auth, setAuth] = useState(isAuth);
+  const [state, dispatch] = useContext(ReducerContext);
+  const { isAuth: auth } = state;
 
   return (
     <Router>
-      <AuthContext.Provider
-        value={{
-          setAuth,
-        }}
-      >
-        <Routes>
-          <Route path='/' element={<LoginPage />} />
-          <Route path='/registration' element={<RegistrationPage />} />
-          <Route
-            path='/homepage'
-            element={
-              <ProtectedRoute isAuth={auth}>
-                <Homepage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/convertitore'
-            element={
-              <ProtectedRoute isAuth={auth}>
-                <ConvertitorePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/meteo'
-            element={
-              <ProtectedRoute isAuth={auth}>
-                <MeteoPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/tasklist'
-            element={
-              <ProtectedRoute isAuth={auth}>
-                <TasklistPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/registration'
-            element={
-              <ProtectedRoute isAuth={auth}>
-                <RegistrationPage />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </AuthContext.Provider>
+      <Routes>
+        <Route path='/' element={<LoginPage />} />
+        <Route path='/registration' element={<RegistrationPage />} />
+        <Route
+          path='/homepage'
+          element={
+            <ProtectedRoute isAuth={auth}>
+              <Homepage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/convertitore'
+          element={
+            <ProtectedRoute isAuth={auth}>
+              <ConvertitorePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/meteo'
+          element={
+            <ProtectedRoute isAuth={auth}>
+              <MeteoPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/tasklist'
+          element={
+            <ProtectedRoute isAuth={auth}>
+              <TasklistPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/registration'
+          element={
+            <ProtectedRoute isAuth={auth}>
+              <RegistrationPage />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
     </Router>
   );
 }

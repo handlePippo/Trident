@@ -1,19 +1,27 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useContext,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import { basicSchemaForm } from "../Utils/bs";
 import BackButton from "../Utils/backBtn";
 import Input from "../Library/Input";
 import Button from "../Library/Button";
 import ToDoImg from "../Utils/media/todoimg.png";
 import uuid from "react-uuid";
-import { useEffect } from "react";
+import { ReducerContext } from "./Reducer/wrapper";
 
 const TaskList = () => {
   const dateInputRef = useRef(null);
   const [taskList, setTaskList] = useState([]);
   const [currentUserData, setCurrentUserData] = useState([]);
   const [form, setForm] = useState({ task: "", date: null });
-  const [error, setError] = useState("");
   const [duplicateError, setDuplicateError] = useState("");
+
+  const [state, dispatch] = useContext(ReducerContext);
+  const { error } = state;
 
   const handleChange = useCallback(
     (value, name) => {
@@ -24,14 +32,20 @@ const TaskList = () => {
             ...form,
             [name]: value,
           });
-          setError("");
+          dispatch({
+            type: "ERROR",
+            payload: "",
+          });
         } catch (error) {
-          setError(error.message);
+          dispatch({
+            type: "ERROR",
+            payload: error.message,
+          });
         }
       };
       validateField();
     },
-    [form]
+    [form, dispatch]
   );
 
   const handleDeleteItem = (el) => {
@@ -43,7 +57,10 @@ const TaskList = () => {
 
   const addNewTask = (newTask) => {
     if (!newTask.task || !newTask.date) {
-      setError("Inserisci una descrizione e una data per il task.");
+      dispatch({
+        type: "ERROR",
+        payload: "Inserisci una descrizione e una data per il task.",
+      });
       return;
     }
 
@@ -88,10 +105,6 @@ const TaskList = () => {
     }
   }, []);
 
-  useEffect(() => {
-    taskList.filter((el) => el.deleted === false);
-  }, [taskList]);
-
   const invertiData = (el) => {
     if (!el.date) {
       return "";
@@ -104,7 +117,9 @@ const TaskList = () => {
     return container.join("/");
   };
 
-  console.log(taskList);
+  useEffect(() => {
+    taskList.filter((el) => el.deleted === false);
+  }, [taskList]);
 
   return (
     <div className='d-flex flex-row justify-content-around'>
@@ -148,7 +163,7 @@ const TaskList = () => {
           <Button
             name='Aggiungi'
             handleClick={handleSubmit}
-            isDisabled={form.task === "" || form.date === null || error}
+            isDisabled={form.task === "" || form.date === null || !!error}
           />
         </form>
       </div>
