@@ -49,9 +49,10 @@ Il progetto è composto dai seguenti file e cartelle principali:
 1. src/: la cartella principale del progetto che contiene tutti i file sorgenti.
 2. src/App.js: il file principale dell'applicazione che gestisce la navigazione tra le varie pagine e fornisce un contesto di autenticazione globale.
 3. src/Components/: la cartella contenente i componenti con cui l'utente può interagire nell'applicazione.
-4. src/Library/: la cartella contenente i componenti riutilizzabili utilizzati nelle varie pagine dell'applicazione.
-5. src/Utils/: la cartella contenente i componenti riutilizzabili utilizzati per varie utilità nelle varie pagine dell'applicazione.
-6. src/Routes/: la cartella contenente i componenti delle varie pagine dell'applicazione.
+4. src/Components/Reducer: la cartella contente il Reducer per la gestione globale di alcuni stati.
+5. src/Library/: la cartella contenente i componenti riutilizzabili utilizzati nelle varie pagine dell'applicazione.
+6. src/Utils/: la cartella contenente i componenti riutilizzabili utilizzati per varie utilità nelle varie pagine dell'applicazione.
+7. src/Routes/: la cartella contenente i componenti delle varie pagine dell'applicazione.
 
 
 ### Dipendenze
